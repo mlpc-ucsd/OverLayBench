@@ -1,0 +1,11 @@
+pyiqa
+torch
+torchvision
+accelerate
+datasets
+open_clip_torch
+git+https://github.com/huggingface/transformers
+qwen-vl-utils[decord]==0.0.8
+
+tqdm
+pillow

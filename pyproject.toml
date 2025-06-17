@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "OverLayBenchPyTools"
+version = "0.1.0"
+description = "A Python evaluation tool"
+authors = [{ name="Bingnan Li", email="libn.152b4a@gmail.com" }]
+readme = "README.md"
+license = { text = "MIT" }
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["."]
