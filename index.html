@@ -32,25 +32,122 @@
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
     <link rel="stylesheet" href="./static/css/index.css">
-    <link rel="icon" href="./static/images/favicon.svg">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script defer src="./static/js/fontawesome.all.min.js"></script>
     <script src="./static/js/bulma-carousel.min.js"></script>
     <script src="./static/js/bulma-slider.min.js"></script>
     <script src="./static/js/index.js"></script>
+    <!--    HTML Math Code-->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <!--    -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" defer></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            new simpleDatatables.DataTable("#overlaybench-table");
+        });
+    </script>
+    <script>
+        let currentTop = 0;
+        let currentSub = 0;
+
+        function showTopTab(index) {
+            currentTop = index;
+            // Update top buttons
+            document.querySelectorAll('.tab-group-left button').forEach((b, i) => {
+                b.classList.toggle('active', i === index);
+            });
+            // Reset sub buttons
+            document.querySelectorAll('.tab-group-right button').forEach((b, i) => {
+                b.classList.toggle('active', i === 0);
+            });
+            currentSub = 0;
+            updateContent();
+        }
+
+        function showSubTab(topIdx, subIdx) {
+            currentSub = subIdx;
+            document.querySelectorAll('.tab-group-right button').forEach((b, i) => {
+                b.classList.toggle('active', i === subIdx);
+            });
+            updateContent();
+        }
+
+        function updateContent() {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach((c) => c.classList.remove('active'));
+            const idx = currentTop * 3 + currentSub;
+            contents[idx].classList.add('active');
+        }
+    </script>
+    <style>
+        .tab-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 1px solid #ccc;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-group-left,
+        .tab-group-right {
+            display: flex;
+        }
+
+        .tab-group-left button,
+        .tab-group-right button {
+            border: none;
+            padding: 8px 14px;
+            cursor: pointer;
+            font-weight: bold;
+            background: #f0f0f0;
+            margin-right: 4px;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+
+        .tab-group-left button.active,
+        .tab-group-right button.active {
+            background: #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            margin-top: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 4px 8px;
+            text-align: center;
+        }
+
+        th {
+            background: #f9f9f9;
+        }
+    </style>
 </head>
 <body>
-
-<nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-    </div>
-</nav>
 
 
 <section class="hero">
@@ -62,11 +159,11 @@
                         for Layout-to-Image Generation with Dense Overlaps</h1>
                     <div class="is-size-5 publication-authors">
             <span class="author-block">
-              <a href="https://www.bingnanli.com">Bingnan Li</a><sup>1</sup>,</span>
+              <a href="https://www.bingnanli.com">Bingnan Li</a><sup>1*</sup>,</span>
                         <span class="author-block">
-              <a href="https://www.linkedin.com/in/chenyu-wang-profile/">Chen-Yu Wang</a><sup>1</sup>,</span>
+              <a href="https://www.linkedin.com/in/chenyu-wang-profile/">Chen-Yu Wang</a><sup>1*</sup>,</span>
                         <span class="author-block">
-              <a href="https://xxuhaiyang.github.io">Haiyang Xu</a><sup>1</sup>,
+              <a href="https://xxuhaiyang.github.io">Haiyang Xu</a><sup>1*</sup>,
             </span>
                         <span class="author-block">
               <a href="https://xzhang.dev">Xiang Zhang</a><sup>1</sup>,
@@ -90,7 +187,9 @@
               <a href="https://pages.ucsd.edu/~ztu/">Zhuowen Tu</a><sup>1</sup>
             </span>
                     </div>
-
+                    <div class="is-size-5 publication-authors">
+                        * equal contribution
+                    </div>
                     <div class="is-size-5 publication-authors">
                         <span class="author-block"><sup>1</sup>University of California, San Diego</span>
                         <span class="author-block"><sup>2</sup>Lambda, Inc.</span>
@@ -139,7 +238,7 @@
               </span>
                             <!-- Dataset Link. -->
                             <span class="link-block">
-                <a href=""
+                <a href="https://huggingface.co/datasets/cywang143/OverLayBench_Eval"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="far fa-images"></i>
@@ -157,24 +256,12 @@
 
 <section class="hero teaser">
     <div class="container is-max-desktop">
-        <div class="hero-body">
-            <img id="teaser" height="100%" alt="teaser" src="./static/images/teaser.png"/>
-            <h2 class="subtitle has-text-centered">
-                Examples from <span class="dnerf">OverLayBench</span> with difficulty increasing from left to right.
-            </h2>
-        </div>
-    </div>
-</section>
-
-<section class="hero teaser">
-    <div class="container is-max-desktop">
-        <div class="hero-body">
-            <img id="failure-cases" height="100%" alt="teaser" src="./static/images/failure_cases.png"/>
-            <h2 class="subtitle has-text-centered">
-                Failure cases from state-of-the-art layout-to-image models. Each row presents an example with
-                overlapping instances, and image captions are shown below.
-            </h2>
-        </div>
+        <figure>
+            <img id="teaser" height="100%" alt="teaser" src="./static/images/teaser.jpg"/>
+            <figcaption class="has-text-centered">
+                Examples from <em>OverLayBench</em> with difficulty increasing from left to right.
+            </figcaption>
+        </figure>
     </div>
 </section>
 
@@ -213,46 +300,827 @@
         <div class="columns is-centered">
             <div class="column is-full-width">
                 <h2 class="title is-3">OverLayScore</h2>
-
-                <!-- Interpolating. -->
-                <h3 class="title is-4">Interpolating states</h3>
                 <div class="content has-text-justified">
-                    <p>
-                        We can also animate the scene by interpolating the deformation latent codes of two input
-                        frames. Use the slider here to linearly interpolate between the left frame and the right
-                        frame.
-                    </p>
-                </div>
-                <div class="columns is-vcentered interpolation-panel">
-                    <div class="column is-3 has-text-centered">
-                        <img src="./static/images/interpolate_start.jpg"
-                             class="interpolation-image"
-                             alt="Interpolate start reference image."/>
-                        <p>Start Frame</p>
-                    </div>
-                    <div class="column interpolation-video-column">
-                        <div id="interpolation-image-wrapper">
-                            Loading...
-                        </div>
-                        <input class="slider is-fullwidth is-large is-info"
-                               id="interpolation-slider"
-                               step="1" min="0" max="100" value="0" type="range">
-                    </div>
-                    <div class="column is-3 has-text-centered">
-                        <img src="./static/images/interpolate_end.jpg"
-                             class="interpolation-image"
-                             alt="Interpolation end reference image."/>
-                        <p class="is-bold">End Frame</p>
-                    </div>
+                    We created OverLayScore to measure how overlapping objects make layout-to-image (L2I) generation
+                    harder. This metric looks at two key factors:
+                    <ul>
+                        <li>
+                            <strong>Spatial overlap</strong> — how much the bounding boxes of objects intersect,
+                            measured by Intersection over Union (IoU).
+                        </li>
+                        <li>
+                            <strong>Semantic similarity</strong> — how similar the descriptions of the objects are in
+                            the CLIP feature space.
+                        </li>
+                    </ul>
+
+                    <figure>
+                        <img id="motivation" height="100%" alt="motivation" src="./static/images/motivation.jpg"/>
+                        <figcaption class="has-text-centered">
+                            Image quality of CreatiLayout across varying levels of bounding box IoU and semantic
+                            similarity, from poorer to better.
+                        </figcaption>
+                    </figure>
+                    When two objects overlap more, the quality of generated images usually drops. If they also have
+                    similar captions (like both describing “a dog”), the problem becomes even worse.
+
+                    OverLayScore combines these effects into a single value, making it easier to benchmark and compare
+                    models on challenging layouts.
+
+                    Formally, OverLayScore is defined as:
+
+                    $$
+                    \text{OverLayScore} =
+                    \sum_{\substack{(i,j): \text{IoU}(B_i,B_j)>0}}
+                    \text{IoU}(B_i,B_j)\,\cdot\,\cos\bigl(\langle p_i, p_j \rangle \bigr)
+                    $$
+
+                    Where \(B_i\) and \(B_j\) are the bounding boxes of objects,
+                    and \(\cos\bigl(\langle p_i, p_j \rangle \bigr)\) is the cosine similarity of their CLIP features.
                 </div>
                 <br/>
-                <!--/ Interpolating. -->
+
+                <h2 class="title is-3">OverLayBench</h2>
+                <div class="content has-text-justified">
+                    OverLayBench is a benchmark to test how well models generate images from layouts with overlapping
+                    objects.
+
+                    We create the dataset in three steps:
+                    <ol>
+                        <li>Generate reference images from captions generated by VLM from real-images.</li>
+                        <li>Use VLM to detect objects, re-captions, and extract relationships.</li>
+                        <li>Manually curate annotations to ensure accuracy.</li>
+                    </ol>
+                    OverLayBench includes 4,052 examples with three overlap difficulty, measured by OverLayScore,
+                    covering a balanced range of overlap difficulty levels:.
+
+                    <figure>
+                        <img id="pipeline" height="100%" alt="teaser" src="./static/images/overlaybench_pipeline.png"/>
+                        <figcaption class="has-text-centered">
+                            An overview of the <em>OverLayBench</em> pipeline.
+                        </figcaption>
+                    </figure>
+
+                    <h3 class="title is-4">Quantitative Results</h3>
+
+                    <div class="tab-bar">
+                        <div class="tab-group-left">
+                            <button class="active" onclick="showTopTab(0)">Training-Based</button>
+                            <button onclick="showTopTab(1)">Training-Free</button>
+                        </div>
+                        <div class="tab-group-right">
+                            <button class="active" onclick="showSubTab(0,0)">Simple</button>
+                            <button onclick="showSubTab(0,1)">Regular</button>
+                            <button onclick="showSubTab(0,2)">Complex</button>
+                        </div>
+                    </div>
+
+                    <div class="tab-content active">
+                        <table id="table-simple">
+                            <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th># Params</th>
+                                <th>mIoU (%)\(\uparrow\)</th>
+                                <th>O-mIoU (%)\(\uparrow\)</th>
+                                <th>SR<sub>E</sub> (%)\(\uparrow\)</th>
+                                <th>SR<sub>R</sub> (%)\(\uparrow\)</th>
+                                <th>CLIP<sub>Global</sub>\(\uparrow\)</th>
+                                <th>CLIP<sub>Local</sub>\(\uparrow\)</th>
+                                <th>FID\(\downarrow\)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td colspan="9" style="text-align:center;font-weight:bold;background:#f0f0f0;">
+                                    UNet-based Models
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>GLIGEN</td>
+                                <td>1.07B</td>
+                                <td>60.54</td>
+                                <td>36.22</td>
+                                <td>49.99</td>
+                                <td>78.72</td>
+                                <td>34.17</td>
+                                <td>24.75</td>
+                                <td>31.27</td>
+                            </tr>
+                            <tr>
+                                <td>InstanceDiff</td>
+                                <td>1.23B</td>
+                                <td style="background:#d0f0c0;"><b>71.21</b></td>
+                                <td style="background:#d0f0c0;"><b>49.99</b></td>
+                                <td>77.71</td>
+                                <td>87.49</td>
+                                <td>34.25</td>
+                                <td>27.69</td>
+                                <td>36.17</td>
+                            </tr>
+                            <tr>
+                                <td>MIGC</td>
+                                <td>0.86B</td>
+                                <td>58.64</td>
+                                <td>32.15</td>
+                                <td>63.41</td>
+                                <td>81.60</td>
+                                <td>33.07</td>
+                                <td>26.49</td>
+                                <td>31.64</td>
+                            </tr>
+                            <tr>
+                                <td>HiCo</td>
+                                <td>1.22B</td>
+                                <td>69.47</td>
+                                <td>47.23</td>
+                                <td>67.75</td>
+                                <td>86.08</td>
+                                <td>35.25</td>
+                                <td>27.04</td>
+                                <td>29.21</td>
+                            </tr>
+                            <tr>
+                                <td colspan="9" style="text-align:center;font-weight:bold;background:#f0f0f0;">
+                                    DiT-based Models
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3DIS</td>
+                                <td>N/A</td>
+                                <td>65.75</td>
+                                <td>38.38</td>
+                                <td style="background:#fff9c4;"><u>86.24</u></td>
+                                <td>86.98</td>
+                                <td>35.85</td>
+                                <td style="background:#d0f0c0;"><b>29.67</b></td>
+                                <td>29.18</td>
+                            </tr>
+                            <tr>
+                                <td>ELIGEN</td>
+                                <td>12.2B</td>
+                                <td>68.17</td>
+                                <td>43.72</td>
+                                <td style="background:#d0f0c0;"><b>86.50</b></td>
+                                <td style="background:#fff9c4;"><u>89.67</u></td>
+                                <td>36.65</td>
+                                <td style="background:#fff9c4;"><u>28.29</u></td>
+                                <td>28.87</td>
+                            </tr>
+                            <tr>
+                                <td>CreatiLayout-SD3</td>
+                                <td>3.31B</td>
+                                <td>58.78</td>
+                                <td>32.52</td>
+                                <td>72.34</td>
+                                <td>84.45</td>
+                                <td style="background:#fff9c4;"><u>37.29</u></td>
+                                <td>27.49</td>
+                                <td style="background:#fff9c4;"><u>27.51</u></td>
+                            </tr>
+                            <tr>
+                                <td>CreatiLayout-FLUX</td>
+                                <td>21.78B</td>
+                                <td style="background:#fff9c4;"><u>71.17</u></td>
+                                <td style="background:#fff9c4;"><u>49.80</u></td>
+                                <td>84.35</td>
+                                <td style="background:#d0f0c0;"><b>90.87</b></td>
+                                <td style="background:#d0f0c0;"><b>37.40</b></td>
+                                <td>28.07</td>
+                                <td style="background:#d0f0c0;"><b>23.79</b></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-content">
+                        <table id="table-regular">
+                            <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th># Params</th>
+                                <th>mIoU (%)\(\uparrow\)</th>
+                                <th>O-mIoU (%)\(\uparrow\)</th>
+                                <th>SR<sub>E</sub> (%)\(\uparrow\)</th>
+                                <th>SR<sub>R</sub> (%)\(\uparrow\)</th>
+                                <th>CLIP<sub>Global</sub>\(\uparrow\)</th>
+                                <th>CLIP<sub>Local</sub>\(\uparrow\)</th>
+                                <th>FID\(\downarrow\)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td colspan="9" style="text-align:center;font-weight:bold;background:#f0f0f0;">
+                                    UNet-based Models
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>GLIGEN</td>
+                                <td>1.07B</td>
+                                <td>52.46</td>
+                                <td style="background:#fff9c4;"><u>34.15</u></td>
+                                <td>44.88</td>
+                                <td>77.46</td>
+                                <td>33.93</td>
+                                <td>23.42</td>
+                                <td>52.22</td>
+                            </tr>
+                            <tr>
+                                <td>InstanceDiff</td>
+                                <td>1.23B</td>
+                                <td style="background:#d0f0c0;"><b>60.08</b></td>
+                                <td>26.53</td>
+                                <td>72.51</td>
+                                <td>83.36</td>
+                                <td>33.09</td>
+                                <td>26.19</td>
+                                <td>59.73</td>
+                            </tr>
+                            <tr>
+                                <td>MIGC</td>
+                                <td>0.86B</td>
+                                <td>47.42</td>
+                                <td>20.06</td>
+                                <td>56.67</td>
+                                <td>77.85</td>
+                                <td>32.72</td>
+                                <td>24.99</td>
+                                <td>54.24</td>
+                            </tr>
+                            <tr>
+                                <td>HiCo</td>
+                                <td>1.22B</td>
+                                <td>55.02</td>
+                                <td>29.60</td>
+                                <td>58.24</td>
+                                <td>79.89</td>
+                                <td>33.91</td>
+                                <td>25.34</td>
+                                <td>49.07</td>
+                            </tr>
+                            <tr>
+                                <td colspan="9" style="text-align:center;font-weight:bold;background:#f0f0f0;">
+                                    DiT-based Models
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3DIS</td>
+                                <td>N/A</td>
+                                <td>55.66</td>
+                                <td>27.29</td>
+                                <td style="background:#fff9c4;"><u>80.80</u></td>
+                                <td>83.69</td>
+                                <td>35.42</td>
+                                <td style="background:#d0f0c0;"><b>28.12</b></td>
+                                <td>48.56</td>
+                            </tr>
+                            <tr>
+                                <td>ELIGEN</td>
+                                <td>12.2B</td>
+                                <td>58.56</td>
+                                <td>32.62</td>
+                                <td style="background:#d0f0c0;"><b>80.85</b></td>
+                                <td style="background:#fff9c4;"><u>84.42</u></td>
+                                <td>36.27</td>
+                                <td style="background:#fff9c4;"><u>27.05</u></td>
+                                <td>45.65</td>
+                            </tr>
+                            <tr>
+                                <td>CreatiLayout-SD3</td>
+                                <td>3.31B</td>
+                                <td>47.04</td>
+                                <td>20.67</td>
+                                <td>62.60</td>
+                                <td>78.31</td>
+                                <td style="background:#fff9c4;"><u>36.67</u></td>
+                                <td>25.55</td>
+                                <td style="background:#fff9c4;"><u>45.57</u></td>
+                            </tr>
+                            <tr>
+                                <td>CreatiLayout-FLUX</td>
+                                <td>21.78B</td>
+                                <td style="background:#fff9c4;"><u>59.72</u></td>
+                                <td style="background:#d0f0c0;"><b>35.51</b></td>
+                                <td>77.20</td>
+                                <td style="background:#d0f0c0;"><b>86.39</b></td>
+                                <td style="background:#d0f0c0;"><b>36.73</b></td>
+                                <td>26.21</td>
+                                <td style="background:#d0f0c0;"><b>41.51</b></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-content">
+                        <table id="table-complex">
+                            <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th># Params</th>
+                                <th>mIoU (%)\(\uparrow\)</th>
+                                <th>O-mIoU (%)\(\uparrow\)</th>
+                                <th>SR<sub>E</sub> (%)\(\uparrow\)</th>
+                                <th>SR<sub>R</sub> (%)\(\uparrow\)</th>
+                                <th>CLIP<sub>Global</sub>\(\uparrow\)</th>
+                                <th>CLIP<sub>Local</sub>\(\uparrow\)</th>
+                                <th>FID\(\downarrow\)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td colspan="9" style="text-align:center;font-weight:bold;background:#f0f0f0;">
+                                    UNet-based Models
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>GLIGEN</td>
+                                <td>1.07B</td>
+                                <td>47.20</td>
+                                <td>25.63</td>
+                                <td>41.70</td>
+                                <td>79.93</td>
+                                <td>33.92</td>
+                                <td>22.75</td>
+                                <td>57.32</td>
+                            </tr>
+                            <tr>
+                                <td>InstanceDiff</td>
+                                <td>1.23B</td>
+                                <td>53.68</td>
+                                <td>23.85</td>
+                                <td>66.02</td>
+                                <td>80.34</td>
+                                <td>32.33</td>
+                                <td>25.53</td>
+                                <td>66.32</td>
+                            </tr>
+                            <tr>
+                                <td>MIGC</td>
+                                <td>0.86B</td>
+                                <td>40.04</td>
+                                <td>13.26</td>
+                                <td>47.80</td>
+                                <td>74.48</td>
+                                <td>31.93</td>
+                                <td>24.20</td>
+                                <td>66.52</td>
+                            </tr>
+                            <tr>
+                                <td>HiCo</td>
+                                <td>1.22B</td>
+                                <td>46.56</td>
+                                <td>20.35</td>
+                                <td>48.88</td>
+                                <td>75.19</td>
+                                <td>33.15</td>
+                                <td>24.41</td>
+                                <td>55.78</td>
+                            </tr>
+                            <tr>
+                                <td colspan="9" style="text-align:center;font-weight:bold;background:#f0f0f0;">
+                                    DiT-based Models
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3DIS</td>
+                                <td>N/A</td>
+                                <td>50.65</td>
+                                <td>21.75</td>
+                                <td style="background:#d0f0c0;"><b>74.31</b></td>
+                                <td>81.57</td>
+                                <td>35.11</td>
+                                <td style="background:#d0f0c0;"><b>27.35</b></td>
+                                <td>54.90</td>
+                            </tr>
+                            <tr>
+                                <td>ELIGEN</td>
+                                <td>12.2B</td>
+                                <td>52.53</td>
+                                <td style="background:#fff9c4;"><u>26.19</u></td>
+                                <td style="background:#fff9c4;"><u>74.03</u></td>
+                                <td style="background:#fff9c4;"><u>84.09</u></td>
+                                <td>36.18</td>
+                                <td style="background:#fff9c4;"><u>25.92</u></td>
+                                <td style="background:#fff9c4;"><u>50.41</u></td>
+                            </tr>
+                            <tr>
+                                <td>CreatiLayout-SD3</td>
+                                <td>3.31B</td>
+                                <td>44.24</td>
+                                <td>18.05</td>
+                                <td>52.10</td>
+                                <td>79.98</td>
+                                <td>36.55</td>
+                                <td>24.76</td>
+                                <td>53.29</td>
+                            </tr>
+                            <tr>
+                                <td>CreatiLayout-FLUX</td>
+                                <td>21.78B</td>
+                                <td style="background:#d0f0c0;"><b>54.50</b></td>
+                                <td style="background:#d0f0c0;"><b>28.97</b></td>
+                                <td>69.72</td>
+                                <td style="background:#d0f0c0;"><b>86.45</b></td>
+                                <td style="background:#d0f0c0;"><b>36.72</b></td>
+                                <td>24.85</td>
+                                <td style="background:#d0f0c0;"><b>45.66</b></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-content">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>mIoU (%)\(\uparrow\)</th>
+                                <th>O-mIoU (%)\(\uparrow\)</th>
+                                <th>SR<sub>E</sub> (%)\(\uparrow\)</th>
+                                <th>SR<sub>R</sub> (%)\(\uparrow\)</th>
+                                <th>CLIP<sub>Global</sub>\(\uparrow\)</th>
+                                <th>CLIP<sub>Local</sub>\(\uparrow\)</th>
+                                <th>FID\(\downarrow\)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td colspan="9" style="text-align:center;font-weight:bold;background:#f0f0f0;">
+                                    UNet-based Models
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>BoxDiff</td>
+                                <td>24.48</td>
+                                <td>7.71</td>
+                                <td>42.03</td>
+                                <td>69.94</td>
+                                <td style="background:#d0f0c0;"><b>36.78</b></td>
+                                <td>21.33</td>
+                                <td style="background:#fff9c4;"><u>34.65</u></td>
+                            </tr>
+                            <tr>
+                                <td>LayoutGuidance</td>
+                                <td>23.12</td>
+                                <td>7.92</td>
+                                <td>45.78</td>
+                                <td>70.83</td>
+                                <td>33.47</td>
+                                <td>21.22</td>
+                                <td>74.40</td>
+                            </tr>
+                            <tr>
+                                <td>R&amp;B</td>
+                                <td>27.78</td>
+                                <td>9.70</td>
+                                <td>36.98</td>
+                                <td>64.05</td>
+                                <td>34.64</td>
+                                <td>21.32</td>
+                                <td>36.57</td>
+                            </tr>
+                            <tr>
+                                <td colspan="9" style="text-align:center;font-weight:bold;background:#f0f0f0;">
+                                    DiT-based Models
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>GroundDiT</td>
+                                <td style="background:#fff9c4;"><u>31.92</u></td>
+                                <td style="background:#fff9c4;"><u>10.93</u></td>
+                                <td style="background:#fff9c4;"><u>48.57</u></td>
+                                <td style="background:#fff9c4;"><u>75.26</u></td>
+                                <td style="background:#fff9c4;"><u>36.10</u></td>
+                                <td style="background:#fff9c4;"><u>22.73</u></td>
+                                <td>34.98</td>
+                            </tr>
+                            <tr>
+                                <td>RegionalPrompting</td>
+                                <td style="background:#d0f0c0;"><b>42.54</b></td>
+                                <td style="background:#d0f0c0;"><b>20.10</b></td>
+                                <td style="background:#d0f0c0;"><b>73.49</b></td>
+                                <td style="background:#d0f0c0;"><b>75.81</b></td>
+                                <td>35.45</td>
+                                <td style="background:#d0f0c0;"><b>27.40</b></td>
+                                <td style="background:#d0f0c0;"><b>23.94</b></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-content">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>mIoU (%)\(\uparrow\)</th>
+                                <th>O-mIoU (%)\(\uparrow\)</th>
+                                <th>SR<sub>E</sub> (%)\(\uparrow\)</th>
+                                <th>SR<sub>R</sub> (%)\(\uparrow\)</th>
+                                <th>CLIP<sub>Global</sub>\(\uparrow\)</th>
+                                <th>CLIP<sub>Local</sub>\(\uparrow\)</th>
+                                <th>FID\(\downarrow\)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td colspan="9" style="text-align:center;font-weight:bold;background:#f0f0f0;">
+                                    UNet-based Models
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>BoxDiff</td>
+                                <td>19.40</td>
+                                <td>5.33</td>
+                                <td>37.58</td>
+                                <td>71.81</td>
+                                <td style="background:#d0f0c0;"><b>36.50</b></td>
+                                <td>19.97</td>
+                                <td>55.41</td>
+                            </tr>
+                            <tr>
+                                <td>LayoutGuidance</td>
+                                <td>15.81</td>
+                                <td>4.51</td>
+                                <td style="background:#fff9c4;"><u>44.94</u></td>
+                                <td style="background:#fff9c4;"><u>72.76</u></td>
+                                <td>31.76</td>
+                                <td>20.05</td>
+                                <td>128.16</td>
+                            </tr>
+                            <tr>
+                                <td>R&amp;B</td>
+                                <td>20.35</td>
+                                <td>5.54</td>
+                                <td>32.85</td>
+                                <td>65.01</td>
+                                <td>34.49</td>
+                                <td>19.88</td>
+                                <td>58.55</td>
+                            </tr>
+                            <tr>
+                                <td colspan="9" style="text-align:center;font-weight:bold;background:#f0f0f0;">
+                                    DiT-based Models
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>GroundDiT</td>
+                                <td style="background:#fff9c4;"><u>24.03</u></td>
+                                <td style="background:#fff9c4;"><u>6.70</u></td>
+                                <td>42.24</td>
+                                <td style="background:#d0f0c0;"><b>74.02</b></td>
+                                <td style="background:#fff9c4;"><u>36.00</u></td>
+                                <td style="background:#fff9c4;"><u>21.10</u></td>
+                                <td style="background:#fff9c4;"><u>54.94</u></td>
+                            </tr>
+                            <tr>
+                                <td>RegionalPrompting</td>
+                                <td style="background:#d0f0c0;"><b>32.72</b></td>
+                                <td style="background:#d0f0c0;"><b>12.29</b></td>
+                                <td style="background:#d0f0c0;"><b>63.74</b></td>
+                                <td>67.08</td>
+                                <td>34.46</td>
+                                <td style="background:#d0f0c0;"><b>25.82</b></td>
+                                <td style="background:#d0f0c0;"><b>43.13</b></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-content">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>mIoU (%)\(\uparrow\)</th>
+                                <th>O-mIoU (%)\(\uparrow\)</th>
+                                <th>SR<sub>E</sub> (%)\(\uparrow\)</th>
+                                <th>SR<sub>R</sub> (%)\(\uparrow\)</th>
+                                <th>CLIP<sub>Global</sub>\(\uparrow\)</th>
+                                <th>CLIP<sub>Local</sub>\(\uparrow\)</th>
+                                <th>FID\(\downarrow\)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td colspan="9" style="text-align:center;font-weight:bold;background:#f0f0f0;">
+                                    UNet-based Models
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>BoxDiff</td>
+                                <td>20.02</td>
+                                <td>5.21</td>
+                                <td>33.52</td>
+                                <td style="background:#fff9c4;"><u>76.41</u></td>
+                                <td style="background:#d0f0c0;"><b>36.92</b></td>
+                                <td>19.91</td>
+                                <td>59.70</td>
+                            </tr>
+                            <tr>
+                                <td>LayoutGuidance</td>
+                                <td>16.34</td>
+                                <td>4.01</td>
+                                <td>37.76</td>
+                                <td>75.53</td>
+                                <td>32.75</td>
+                                <td>19.72</td>
+                                <td>119.32</td>
+                            </tr>
+                            <tr>
+                                <td>R&amp;B</td>
+                                <td>19.80</td>
+                                <td>4.85</td>
+                                <td>28.38</td>
+                                <td>69.97</td>
+                                <td>34.57</td>
+                                <td>19.47</td>
+                                <td>63.71</td>
+                            </tr>
+                            <tr>
+                                <td colspan="9" style="text-align:center;font-weight:bold;background:#f0f0f0;">
+                                    DiT-based Models
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>GroundDiT</td>
+                                <td style="background:#fff9c4;"><u>24.77</u></td>
+                                <td style="background:#fff9c4;"><u>6.58</u></td>
+                                <td style="background:#fff9c4;"><u>37.85</u></td>
+                                <td style="background:#d0f0c0;"><b>77.03</b></td>
+                                <td style="background:#fff9c4;"><u>36.20</u></td>
+                                <td style="background:#fff9c4;"><u>20.55</u></td>
+                                <td style="background:#fff9c4;"><u>55.59</u></td>
+                            </tr>
+                            <tr>
+                                <td>RegionalPrompting</td>
+                                <td style="background:#d0f0c0;"><b>28.35</b></td>
+                                <td style="background:#d0f0c0;"><b>9.05</b></td>
+                                <td style="background:#d0f0c0;"><b>53.56</b></td>
+                                <td>60.37</td>
+                                <td>33.34</td>
+                                <td style="background:#d0f0c0;"><b>25.29</b></td>
+                                <td style="background:#d0f0c0;"><b>49.41</b></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3 class="title is-4">Qualitative Results</h3>
+                    <figure>
+                        <img id="qual-res" height="100%" alt="teaser" src="./static/images/qual-res.jpg"/>
+                        <figcaption class="has-text-centered">
+                            Comparison of generated images from different models on our <em>OverLayBench</em>.
+                        </figcaption>
+                    </figure>
+                </div>
+                <br/>
+
+                <h2 class="title is-3">CreatiLayout-AM</h2>
+                <div class="content has-text-justified">
+                    <p>
+                        CreatiLayout-AM is an enhanced version of CreatiLayout designed to better handle complex
+                        overlapping objects. Unlike standard training, it incorporates amodal masks—complete object
+                        shapes even when parts are occluded—during training. By fine-tuning the model on a large set of
+                        synthetic occlusion examples and aligning its attention maps with ground truth amodal masks,
+                        CreatiLayout-AM improves the generation of distinct, coherent objects in overlapped
+                        regions. Experiments show consistent gains in overlap-sensitive metrics like O-mIoU, confirming
+                        that explicit occlusion supervision can significantly improve generation quality under
+                        challenging layouts.
+                    </p>
+
+                    <h3 class="title is-4">Qualitative Comparison between basemodel</h3>
+                    <table id="creatilayout-am-table">
+                        <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Split</th>
+                            <th>mIoU (%)\(\uparrow\)</th>
+                            <th>O-mIoU (%)\(\uparrow\)</th>
+                            <th>SR<sub>E</sub> (%)\(\uparrow\)</th>
+                            <th>SR<sub>R</sub> (%)\(\uparrow\)</th>
+                            <th>CLIP<sub>Global</sub>\(\uparrow\)</th>
+                            <th>CLIP<sub>Local</sub>\(\uparrow\)</th>
+                            <th>FID\(\downarrow\)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Simple -->
+                        <tr>
+                            <td>CreatiLayout</td>
+                            <td>Simple</td>
+                            <td>58.78</td>
+                            <td>32.52</td>
+                            <td>72.34</td>
+                            <td>84.45</td>
+                            <td>37.29</td>
+                            <td>27.49</td>
+                            <td>27.51</td>
+                        </tr>
+                        <tr>
+                            <td>Ours</td>
+                            <td>Simple</td>
+                            <td>61.16</td>
+                            <td>37.69</td>
+                            <td>73.33</td>
+                            <td>84.84</td>
+                            <td>37.17</td>
+                            <td>27.44</td>
+                            <td>27.76</td>
+                        </tr>
+                        <tr>
+                            <td style="font-style:italic;color:#4caf50;">vs. BaseModel</td>
+                            <td></td>
+                            <td style="color:#4caf50;">+4.05%</td>
+                            <td style="color:#4caf50;">+15.88%</td>
+                            <td style="color:#4caf50;">+1.37%</td>
+                            <td style="color:#4caf50;">+0.46%</td>
+                            <td style="color:#e53935;">-0.32%</td>
+                            <td style="color:#e53935;">-0.18%</td>
+                            <td style="color:#e53935;">+0.91%</td>
+                        </tr>
+
+                        <!-- Regular -->
+                        <tr>
+                            <td>CreatiLayout</td>
+                            <td>Regular</td>
+                            <td>47.04</td>
+                            <td>20.67</td>
+                            <td>62.60</td>
+                            <td>78.31</td>
+                            <td>36.67</td>
+                            <td>25.55</td>
+                            <td>45.57</td>
+                        </tr>
+                        <tr>
+                            <td>Ours</td>
+                            <td>Regular</td>
+                            <td>47.38</td>
+                            <td>21.79</td>
+                            <td>63.13</td>
+                            <td>78.71</td>
+                            <td>36.49</td>
+                            <td>25.46</td>
+                            <td>46.34</td>
+                        </tr>
+                        <tr>
+                            <td style="font-style:italic;color:#4caf50;">vs. BaseModel</td>
+                            <td></td>
+                            <td style="color:#4caf50;">+0.72%</td>
+                            <td style="color:#4caf50;">+5.42%</td>
+                            <td style="color:#4caf50;">+0.85%</td>
+                            <td style="color:#4caf50;">+0.51%</td>
+                            <td style="color:#e53935;">-0.49%</td>
+                            <td style="color:#e53935;">-0.35%</td>
+                            <td style="color:#e53935;">+1.68%</td>
+                        </tr>
+
+                        <!-- Complex -->
+                        <tr>
+                            <td>CreatiLayout</td>
+                            <td>Complex</td>
+                            <td>44.24</td>
+                            <td>18.05</td>
+                            <td>52.10</td>
+                            <td>79.98</td>
+                            <td>36.55</td>
+                            <td>24.76</td>
+                            <td>53.29</td>
+                        </tr>
+                        <tr>
+                            <td>Ours</td>
+                            <td>Complex</td>
+                            <td>43.97</td>
+                            <td>18.07</td>
+                            <td>52.49</td>
+                            <td>79.77</td>
+                            <td>36.32</td>
+                            <td>24.72</td>
+                            <td>53.48</td>
+                        </tr>
+                        <tr>
+                            <td style="font-style:italic;color:#4caf50;">vs. BaseModel</td>
+                            <td></td>
+                            <td style="color:#e53935;">-0.61%</td>
+                            <td style="color:#4caf50;">+0.11%</td>
+                            <td style="color:#4caf50;">+0.75%</td>
+                            <td style="color:#e53935;">-0.26%</td>
+                            <td style="color:#e53935;">-0.63%</td>
+                            <td style="color:#e53935;">-0.16%</td>
+                            <td style="color:#e53935;">+0.36%</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 class="title is-4">Qualitative Comparison between basemodel</h3>
+                    <figure>
+                        <img id="qual-res-ours" height="100%" alt="teaser" src="./static/images/ours_vs_base.jpg"/>
+                        <figcaption class="has-text-centered">
+                            Comparison of generated image from CreatiLayout and CreatiLayout-AM. The CreatiLayout-AM
+                            generates overlap instances better, leading to more coherent and realistic images.
+                        </figcaption>
+                    </figure>
+                </div>
+                <br/>
 
             </div>
+
         </div>
-        <!--/ Animation. -->
-
-
     </div>
 </section>
 
@@ -260,12 +1128,14 @@
 <section class="section" id="BibTeX">
     <div class="container is-max-desktop content">
         <h2 class="title">BibTeX</h2>
-        <pre><code>@article{park2021nerfies,
-  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
-  title     = {Nerfies: Deformable Neural Radiance Fields},
-  journal   = {ICCV},
-  year      = {2021},
-}</code></pre>
+        <pre><code>
+<!--            @article{park2021nerfies,-->
+            <!--  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},-->
+            <!--  title     = {Nerfies: Deformable Neural Radiance Fields},-->
+            <!--  journal   = {ICCV},-->
+            <!--  year      = {2021},-->
+            <!--}-->
+        </code></pre>
     </div>
 </section>
 
@@ -276,7 +1146,8 @@
             <div class="column is-8">
                 <div class="content">
                     <p align="center">
-                    This template is borrowed from <a href="https://github.com/nerfies/nerfies.github.io">nerfies</a>.
+                        This template is borrowed from <a
+                            href="https://github.com/nerfies/nerfies.github.io">nerfies</a>.
                     </p>
                 </div>
             </div>
