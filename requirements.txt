@@ -1,11 +1,11 @@
 pyiqa
-torch
-torchvision
-accelerate
-datasets
+torch==2.6.0
+torchvision==0.21.0
+accelerate==1.5.2
+datasets==3.4.1
 open_clip_torch
-git+https://github.com/huggingface/transformers
-qwen-vl-utils[decord]==0.0.8
+qwen-vl-utils
 
 tqdm
 pillow
+prettytable
