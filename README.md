@@ -5,7 +5,7 @@ for Layout-to-Image Generation with Dense Overlaps</h1>
 <p align="center">
     <a href="" target="_blank">
         <img alt="arXiv" src="https://img.shields.io/badge/arXiv-OverLayBench-red?logo=arxiv" height="20" /></a>
-    <a href="" target="_blank">
+    <a href="https://mlpc-ucsd.github.io/OverLayBench/" target="_blank">
         <img alt="Website" src="https://img.shields.io/badge/🌎_Website-OverLayBench-blue.svg" height="20" /></a>
     <a href="https://huggingface.co/datasets/cywang143/OverLayBench_Eval" target="_blank">
         <img alt="HF Dataset: Science-T2I" src="https://img.shields.io/badge/%F0%9F%A4%97%20_Hugging Face-OVerLayBench-ffc107?color=ffc107&logoColor=white" height="20" /></a>
