@@ -61,9 +61,9 @@ scenarios.
 
 ## 🔥 News
 
-- **[2024-06-17]**: The code and the evaluation toolkit are released!
-- **[2025-09-19]**: OverLayBench is accepted by NeurIPS 2025 D&B Track! 🎉🎉🎉
 - **[2025-09-23]**: The preprint is available on [arXiv](https://arxiv.org/abs/2509.19282)!
+- **[2025-09-19]**: OverLayBench is accepted by NeurIPS 2025 D&B Track! 🎉🎉🎉
+- **[2024-06-17]**: The code and the evaluation toolkit are released!
 
 ## 🚀 Quick Start
 
