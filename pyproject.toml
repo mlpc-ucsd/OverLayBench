@@ -1,9 +1,9 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "OverLayBenchPyTools"
+name = "overlaybenchpytools"
 version = "0.1.0"
 description = "A Python evaluation tool"
 authors = [{ name="Bingnan Li", email="libn.152b4a@gmail.com" }]
@@ -11,5 +11,5 @@ readme = "README.md"
 license = { text = "MIT" }
 dependencies = []
 
-[tool.setuptools.packages.find]
-where = ["."]
+[tool.setuptools]
+packages = { find = { include = ["overlaybenchpytools*"], where = ["."] } }
