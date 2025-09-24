@@ -87,7 +87,7 @@ conda activate overlaybench
 bash install.sh
 ```
 
-### 🧪 Evaluate Your Wwn Model!
+### 🧪 Evaluate Your Own Model!
 According to the [discussion](https://github.com/vllm-project/vllm/issues/8893#issuecomment-2379405305), for vllm inference, please set environment variable `VLLM_WORKER_MULTIPROC_METHOD=spawn` before running the code.
 Also, please make sure the `OverLayBenchMeter` is initialized within `if __name__ == "__main__":` block to avoid the `RuntimeError: Cannot re-initialize CUDA in forked subprocess` error.
 
