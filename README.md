@@ -3,7 +3,7 @@ for Layout-to-Image Generation with Dense Overlaps</h1>
 
 
 <p align="center">
-    <a href="" target="_blank">
+    <a href="https://arxiv.org/abs/2509.19282" target="_blank">
         <img alt="arXiv" src="https://img.shields.io/badge/arXiv-OverLayBench-red?logo=arxiv" height="20" /></a>
     <a href="https://mlpc-ucsd.github.io/OverLayBench/" target="_blank">
         <img alt="Website" src="https://img.shields.io/badge/🌎_Website-OverLayBench-blue.svg" height="20" /></a>
@@ -61,7 +61,9 @@ scenarios.
 
 ## 🔥 News
 
-- **[2025-06-17]**:
+- **[2024-06-17]**: The code and the evaluation toolkit are released!
+- **[2025-09-19]**: OverLayBench is accepted by NeurIPS 2025 D&B Track! 🎉🎉🎉
+- **[2025-09-23]**: The preprint is available on [arXiv](https://arxiv.org/abs/2509.19282)!
 
 ## 🚀 Quick Start
 
@@ -142,5 +144,13 @@ We deeply appreciate the contributions of the following projects:
 
 
 ```bibtex
-
+@misc{li2025overlaybenchbenchmarklayouttoimagegeneration,
+      title={OverLayBench: A Benchmark for Layout-to-Image Generation with Dense Overlaps}, 
+      author={Bingnan Li and Chen-Yu Wang and Haiyang Xu and Xiang Zhang and Ethan Armand and Divyansh Srivastava and Xiaojun Shan and Zeyuan Chen and Jianwen Xie and Zhuowen Tu},
+      year={2025},
+      eprint={2509.19282},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2509.19282}, 
+}
 ```

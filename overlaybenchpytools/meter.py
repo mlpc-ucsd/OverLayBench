@@ -205,8 +205,9 @@ class OverLayBenchMeter:
         :param file_name: The name of the file to save the results.
         :return: A dictionary containing the results of the task.
         """
-        assert task in ['BBox Prediction', 'Entity VQA', 'Relationship VQA'], \
-            f"Mode must be either 'Entity' or 'Relationship', but get {task}."
+        valid_tasks = ['BBox Prediction', 'Entity VQA', 'Relationship VQA']
+        assert task in valid_tasks, \
+            f"Mode must be in {valid_tasks}, but get {task}."
         res = {}
         self.logger.info(f"Starting {task}...")
         for i in tqdm(range(0, len(self.dataset), self.bs_qwen)):
