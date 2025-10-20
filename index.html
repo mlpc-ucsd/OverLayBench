@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-S7G4Q56NZN"></script>
@@ -7,7 +7,6 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-
         gtag('config', 'G-S7G4Q56NZN');
     </script>
     <meta charset="utf-8">
@@ -17,20 +16,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>OverLayBench: A Benchmark for Layout-to-Image Generation with Dense Overlaps</title>
 
-    <script>
-        window.dataLayer = window.dataLayer || [];
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-
-        gtag('js', new Date());
-
-        gtag('config', 'G-PYVRSFMDRL');
-    </script>
-
-    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-          rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="canonical" href="https://mlpc-ucsd.github.io/OverLayBench/">
+    <meta name="robots" content="index,follow">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="OverLayBench: A Benchmark for Layout-to-Image Generation with Dense Overlaps">
+    <meta property="og:description" content="OverLayBench and OverLayScore: evaluating layout-to-image generation under dense overlaps with amodal supervision (CreatiLayout-AM).">
+    <meta property="og:url" content="https://mlpc-ucsd.github.io/OverLayBench/">
+    <meta property="og:image" content="https://mlpc-ucsd.github.io/OverLayBench/static/images/teaser.webp">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="OverLayBench: Layout-to-Image under Dense Overlaps">
+    <meta name="twitter:description" content="Benchmark + metric (OverLayScore) + method (CreatiLayout-AM).">
+    <meta name="twitter:image" content="https://mlpc-ucsd.github.io/OverLayBench/static/images/teaser.webp">
 
     <link rel="stylesheet" href="./static/css/bulma.min.css">
     <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
@@ -44,23 +43,14 @@
     <script src="./static/js/bulma-carousel.min.js"></script>
     <script src="./static/js/bulma-slider.min.js"></script>
     <script src="./static/js/index.js"></script>
-    <!--    HTML Math Code-->
     <script id="MathJax-script" async
             src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
     </script>
 
-    <!--    -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css">
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" defer></script>
-    <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            new simpleDatatables.DataTable("#overlaybench-table");
-        });
-    </script>
     <script>
         let currentTop = 0;
         let currentSub = 0;
@@ -151,6 +141,43 @@
             background: #f9f9f9;
         }
     </style>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "OverLayBench",
+            "url": "https://mlpc-ucsd.github.io/OverLayBench/",
+            "description": "A benchmark and metric (OverLayScore) for layout-to-image generation with dense overlaps.",
+            "publisher": {
+                "@type": "CollegeOrUniversity",
+                "name": "University of California, San Diego"
+            }
+        }
+    </script>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "ScholarlyArticle",
+            "name": "OverLayBench: A Benchmark for Layout-to-Image Generation with Dense Overlaps",
+            "url": "https://arxiv.org/abs/2509.19282",
+            "author": [
+                {"@type":"Person","name":"Bingnan Li"},
+                {"@type":"Person","name":"Chen-Yu Wang"},
+                {"@type":"Person","name":"Haiyang Xu"},
+                {"@type":"Person","name":"Xiang Zhang"},
+                {"@type":"Person","name":"Ethan Armand"},
+                {"@type":"Person","name":"Divyansh Srivastava"},
+                {"@type":"Person","name":"Xiaojun Shan"},
+                {"@type":"Person","name":"Zeyuan Chen"},
+                {"@type":"Person","name":"Jianwen Xie"},
+                {"@type":"Person","name":"Zhuowen Tu"}
+            ],
+            "datePublished": "2025-09-30",
+            "publisher": {"@type":"Organization","name":"arXiv"},
+            "about": "Layout-to-image generation, overlaps, amodal masks",
+            "image": "https://mlpc-ucsd.github.io/OverLayBench/static/images/teaser.webp"
+        }
+    </script>
 </head>
 <body>
 
@@ -1114,14 +1141,11 @@
     <div class="container is-max-desktop content">
         <h2 class="title">BibTeX</h2>
         <pre><code>
-@misc{li2025overlaybenchbenchmarklayouttoimagegeneration,
-    title={OverLayBench: A Benchmark for Layout-to-Image Generation with Dense Overlaps},
-    author={Bingnan Li and Chen-Yu Wang and Haiyang Xu and Xiang Zhang and Ethan Armand and Divyansh Srivastava and Xiaojun Shan and Zeyuan Chen and Jianwen Xie and Zhuowen Tu},
-    year={2025},
-    eprint={2509.19282},
-    archivePrefix={arXiv},
-    primaryClass={cs.CV},
-    url={https://arxiv.org/abs/2509.19282},
+@article{li2025overlaybench,
+  title={OverLayBench: A Benchmark for Layout-to-Image Generation with Dense Overlaps},
+  author={Li, Bingnan and Wang, Chen-Yu and Xu, Haiyang and Zhang, Xiang and Armand, Ethan and Srivastava, Divyansh and Shan, Xiaojun and Chen, Zeyuan and Xie, Jianwen and Tu, Zhuowen},
+  journal={arXiv preprint arXiv:2509.19282},
+  year={2025}
 }
         </code></pre>
     </div>
