@@ -72,7 +72,7 @@ scenarios.
 If you are using Multi-GPUs, we recommend you to use [vllm](https://github.com/vllm-project/vllm) for accelerated inference.
 
 ```bash
-git clone https://github.com/cuttle-fish-my/OverLayBenchPyTools.git
+git clone https://github.com/mlpc-ucsd/OverLayBench.git
 cd OverLayBenchPyTools
 conda create -n overlaybench python=3.10.16 --yes
 conda activate overlaybench
@@ -80,7 +80,7 @@ bash install_vllm.sh
 ```
 Otherwise, you may also choose to use the default huggingface transformers, which is slower but more stable.
 ```bash
-git clone https://github.com/cuttle-fish-my/OverLayBenchPyTools.git
+git clone https://github.com/mlpc-ucsd/OverLayBench.git
 cd OverLayBenchPyTools
 conda create -n overlaybench python=3.10.16 --yes
 conda activate overlaybench
