@@ -72,7 +72,7 @@ scenarios.
 If you are using Multi-GPUs, we recommend you to use [vllm](https://github.com/vllm-project/vllm) for accelerated inference.
 
 ```bash
-git clone https://github.com/cuttle-fish-my/OverLayBenchPyTools.git
+git clone https://github.com/mlpc-ucsd/OverLayBench.git
 cd OverLayBenchPyTools
 conda create -n overlaybench python=3.10.16 --yes
 conda activate overlaybench
@@ -80,7 +80,7 @@ bash install_vllm.sh
 ```
 Otherwise, you may also choose to use the default huggingface transformers, which is slower but more stable.
 ```bash
-git clone https://github.com/cuttle-fish-my/OverLayBenchPyTools.git
+git clone https://github.com/mlpc-ucsd/OverLayBench.git
 cd OverLayBenchPyTools
 conda create -n overlaybench python=3.10.16 --yes
 conda activate overlaybench
@@ -187,13 +187,10 @@ We deeply appreciate the contributions of the following projects:
 
 
 ```bibtex
-@misc{li2025overlaybenchbenchmarklayouttoimagegeneration,
-      title={OverLayBench: A Benchmark for Layout-to-Image Generation with Dense Overlaps}, 
-      author={Bingnan Li and Chen-Yu Wang and Haiyang Xu and Xiang Zhang and Ethan Armand and Divyansh Srivastava and Xiaojun Shan and Zeyuan Chen and Jianwen Xie and Zhuowen Tu},
-      year={2025},
-      eprint={2509.19282},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2509.19282}, 
+@article{li2025overlaybench,
+  title={OverLayBench: A Benchmark for Layout-to-Image Generation with Dense Overlaps},
+  author={Li, Bingnan and Wang, Chen-Yu and Xu, Haiyang and Zhang, Xiang and Armand, Ethan and Srivastava, Divyansh and Shan, Xiaojun and Chen, Zeyuan and Xie, Jianwen and Tu, Zhuowen},
+  journal={arXiv preprint arXiv:2509.19282},
+  year={2025}
 }
 ```
