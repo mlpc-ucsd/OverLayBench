@@ -88,6 +88,27 @@ bash install.sh
 ```
 
 ### 🧪 Evaluate Your Own Model!
+OverLayBenchMeter assumes that the generated images are organized in the following structure:
+```
+EXP_NAME
+├── simple
+│   ├── seed_1
+│   │   ├── img_id_1.png
+│   │   ├── img_id_2.png
+│   │   ├── img_id_3.png
+│   │   └── ...
+│   ├── seed_2
+│   └── seed_3
+├── medium
+│   ├── seed_1
+│   ├── seed_2
+│   └── seed_3
+└── hard
+    ├── seed_1
+    ├── seed_2
+    └── seed_3
+```
+
 According to the [discussion](https://github.com/vllm-project/vllm/issues/8893#issuecomment-2379405305), for vllm inference, please set environment variable `VLLM_WORKER_MULTIPROC_METHOD=spawn` before running the code.
 Also, please make sure the `OverLayBenchMeter` is initialized within `if __name__ == "__main__":` block to avoid the `RuntimeError: Cannot re-initialize CUDA in forked subprocess` error.
 
@@ -123,6 +144,28 @@ if __name__ == "__main__":
 `OverLayBenchMeter` covers the evaluation of `mIoU`, `Overlay mIoU(o-mIoU)`, `Entity Success Rate (SR_E)`,
 `Relashionship Success Rate (SR_R)`, `Relationship Success Rate (SR_R)`, `Global CLIPScore` and `Local CLIPScore`.
 For `FID`, please refer to the [IQA-PyTorch](https://github.com/chaofengc/IQA-PyTorch) package.
+
+The expected log file structure is as follows:
+```metrics
+metrics
+├── overlay_bench.log
+├── simple
+│   ├── seed_1
+│   │   ├── baseline_bbox_predictions.json
+│   │   ├── entity_VQA.json
+│   │   ├── relation_VQA.json
+│   │   └── ...
+│   ├── seed_2
+│   └── seed_3
+├── medium
+│   ├── seed_1
+│   ├── seed_2
+│   └── seed_3
+└── hard
+    ├── seed_1
+    ├── seed_2
+    └── seed_3
+```
 
 ![qual-res.jpg](images/qual-res.jpg)
 <p align="center">

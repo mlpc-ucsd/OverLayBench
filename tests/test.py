@@ -4,7 +4,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description="Evaluate OverLayBench")
 parser.add_argument("--root", type=str)
-parser.add_argument("--save_dir", type=str, default="./results")
+parser.add_argument("--save_dir", type=str, default="./metrics")
 parser.add_argument("--resolution", type=int, default=1024)
 parser.add_argument("--tensor_parallel_size", type=int, default=8)
 parser.add_argument("--seeds", type=int, nargs='+')

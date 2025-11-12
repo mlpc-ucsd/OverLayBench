@@ -104,15 +104,41 @@ class OverLayBenchMeter:
 
     def _read_images(self):
         images = {}
-        for img_id in tqdm(self.annotations, desc="Loading images"):
-            images[img_id] = Image.open(os.path.join(self.root, self.split,
-                                                     str(self.seed), f"{img_id}.{self.extension}")).convert("RGB")
+        try:
+            for img_id in tqdm(self.annotations, desc="Loading images"):
+                images[img_id] = Image.open(os.path.join(self.root, self.split,
+                                                         str(self.seed), f"{img_id}.{self.extension}")).convert("RGB")
+        except Exception as e:
+            self.logger.error(f"Error loading images: {e}")
+            self.logger.error("OverLayBenchMeter expected the images to be stored in the following path format: ")
+            self.logger.error(
+                """
+EXP_NAME
+├── simple
+│   ├── seed_1
+│   │   ├── img_id_1.png
+│   │   ├── img_id_2.png
+│   │   ├── img_id_3.png
+│   │   └── ...
+│   ├── seed_2
+│   └── seed_3
+├── medium
+│   ├── seed_1
+│   ├── seed_2
+│   └── seed_3
+└── hard
+    ├── seed_1
+    ├── seed_2
+    └── seed_3
+                """
+            )
+            raise e
         return images
 
     def set_split(self, split, seed):
         self.split = split
         self.seed = seed
-        self.save_dir = os.path.join(self.save_root, f"{self.split}")
+        self.save_dir = os.path.join(self.save_root, self.split, str(self.seed))
         Path(self.save_dir).mkdir(parents=True, exist_ok=True)
         self.logger.info(f"Loading OverLayBench dataset {self.split} split...")
         self.dataset = load_dataset("cywang143/OverLayBench_Eval",
