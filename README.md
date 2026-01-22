@@ -73,7 +73,7 @@ If you are using Multi-GPUs, we recommend you to use [vllm](https://github.com/v
 
 ```bash
 git clone https://github.com/mlpc-ucsd/OverLayBench.git
-cd OverLayBenchPyTools
+cd OverLayBenchPy
 conda create -n overlaybench python=3.10.16 --yes
 conda activate overlaybench
 bash install_vllm.sh
@@ -81,7 +81,7 @@ bash install_vllm.sh
 Otherwise, you may also choose to use the default huggingface transformers, which is slower but more stable.
 ```bash
 git clone https://github.com/mlpc-ucsd/OverLayBench.git
-cd OverLayBenchPyTools
+cd OverLayBenchPy
 conda create -n overlaybench python=3.10.16 --yes
 conda activate overlaybench
 bash install.sh
@@ -114,6 +114,8 @@ Also, please make sure the `OverLayBenchMeter` is initialized within `if __name_
 
 ```python
 from overlaybenchpytools.meter import OverLayBenchMeter
+import os
+os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
 
 if __name__ == "__main__":
     meter = OverLayBenchMeter(
@@ -130,6 +132,8 @@ For `transformers` based inference, please remove the `use_vllm` and the `vllm_a
 
 ```python
 from overlaybenchpytools.meter import OverLayBenchMeter
+import os
+os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
 
 if __name__ == "__main__":
     meter = OverLayBenchMeter(
