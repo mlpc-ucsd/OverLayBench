@@ -153,12 +153,35 @@ img {
 }
 
 .leaderboard-export-row {
-  margin-top: 0.2rem;
-  margin-bottom: 0.9rem;
+  margin: 0;
+  margin-left: auto;
+  display: flex;
+  align-items: flex-end;
 }
 
 .export-btn {
   border: 1px solid #d1d5db;
+}
+
+.leaderboard-toolbar {
+  margin-bottom: 0.9rem;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.9rem;
+}
+
+.leaderboard-toolbar .leaderboard-controls {
+  margin: 0;
+  flex: 1;
+}
+
+.leaderboard-toolbar .field {
+  margin-bottom: 0;
 }
 
 .metric-trend-wrap {
@@ -499,6 +522,19 @@ img {
 
   .leaderboard-controls-two {
     max-width: none;
+  }
+
+  .leaderboard-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .leaderboard-export-row {
+    margin-left: 0;
+  }
+
+  .leaderboard-export-row .export-btn {
+    width: 100%;
   }
 }
 

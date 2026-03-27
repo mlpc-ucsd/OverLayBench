@@ -46,6 +46,27 @@ function parsePubYear(pubText) {
   return match ? Number(match[0]) : null;
 }
 
+function parseMethodTime(meta) {
+  if (!meta) return null;
+  if (typeof meta.time === "string") {
+    const t = Date.parse(meta.time);
+    if (!Number.isNaN(t)) return t;
+  }
+  if (meta.time !== undefined && meta.time !== null && meta.time !== "") {
+    const t = Number(meta.time);
+    if (!Number.isNaN(t) && t > 1000000000000) return t;
+    if (!Number.isNaN(t)) {
+      const year = Math.floor(t);
+      const frac = t - year;
+      const dayOfYear = Math.max(1, Math.round(frac * 365));
+      const d = new Date(Date.UTC(year, 0, dayOfYear));
+      return d.getTime();
+    }
+  }
+  const y = parsePubYear(meta.pub);
+  return y ? Date.UTC(y, 0, 1) : null;
+}
+
 function getPageFromHash() {
   const hash = (window.location.hash || "#overview").replace("#", "");
   return PAGES.includes(hash) ? hash : "overview";
@@ -116,8 +137,9 @@ function Hero() {
               <h1 className="title is-1 publication-title">OverLayBench</h1>
               <h2 className="subtitle is-4 hero-subtitle">A Benchmark for Layout-to-Image Generation with Dense Overlaps</h2>
               <p className="hero-desc">
-                OverLayBench studies difficult L2I layouts where objects overlap heavily and have similar semantics.
-                This project page provides detailed paper breakdowns, interactive leaderboard views, and resources.
+                {/* OverLayBench studies difficult L2I layouts where objects overlap heavily and have similar semantics. */}
+                {/* This project page provides detailed paper breakdowns, interactive leaderboard views, and resources. */}
+                Existing layout-to-image models still struggle with dense overlaps, especially when instances are both spatially entangled and semantically similar. We introduce OverLayScore to measure this difficulty, build OverLayBench with balanced simple/regular/complex splits and high-quality annotations, and present CreatiLayout-AM as an overlap-aware baseline with amodal-mask supervision.
               </p>
               <div className="hero-ctas">
                 <a href="https://arxiv.org/abs/2509.19282" className="button is-dark is-rounded">
@@ -380,19 +402,6 @@ function OverviewPage() {
           </div>
         </div>
       </section>
-
-      <section className="section section-tinted">
-        <div className="container is-max-widescreen">
-          <h2 className="title is-4">Limitations &amp; Outlook</h2>
-          <div className="content paper-detail">
-            <ul>
-              <li>Complex-split gains from amodal tuning remain limited; domain shift from synthetic occlusions is an open issue.</li>
-              <li>Relationship reasoning (SRR) still trails spatial control — richer interaction annotations may be needed.</li>
-              <li>Stronger architectures and training objectives for occlusion-aware generation remain promising next steps.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
       <section className="section" id="BibTeX">
         <div className="container is-max-desktop content">
           <h2 className="title is-4">BibTeX</h2>
@@ -423,14 +432,14 @@ function LeaderboardPage({ data, methodMeta }) {
   const trendPoints = useMemo(() => {
     return ranked
       .map((row) => {
-        const year = parsePubYear(methodMeta[row.method]?.pub);
+        const year = parseMethodTime(methodMeta[row.method]);
         const metricValue = row[sortConfig.key];
         const missingMetric = metricValue === "N/A" || metricValue === null || metricValue === undefined || Number.isNaN(Number(metricValue));
         if (!year || missingMetric) return null;
-        return { method: row.method, backbone: row.backbone, year, value: Number(metricValue) };
+        return { method: row.method, backbone: row.backbone, time: year, value: Number(metricValue) };
       })
       .filter(Boolean)
-      .sort((a, b) => a.year - b.year || a.method.localeCompare(b.method));
+      .sort((a, b) => a.time - b.time || a.method.localeCompare(b.method));
   }, [ranked, sortConfig, methodMeta]);
 
   useEffect(() => {
@@ -442,33 +451,55 @@ function LeaderboardPage({ data, methodMeta }) {
       "DiT": "#8b5cf6",
       "AR": "#f59e0b"
     };
-    const series = backbones.map((bb) => {
-      const dataPoints = trendPoints
+    const series = backbones.flatMap((bb) => {
+      const raw = trendPoints
         .filter((d) => d.backbone === bb)
-        .map((d) => ({ value: [d.year, d.value], method: d.method, backbone: d.backbone }));
-      return {
-        name: bb,
-        type: "line",
-        showSymbol: true,
-        symbolSize: 8,
-        smooth: true,
-        connectNulls: false,
-        data: dataPoints,
-        lineStyle: { width: 2.5 },
-        itemStyle: { color: colorMap[bb] || "#2563eb" }
-      };
+        .map((d) => ({ value: [d.time, d.value], method: d.method, backbone: d.backbone }));
+      const grouped = {};
+      raw.forEach((d) => {
+        const t = d.value[0];
+        if (!grouped[t]) grouped[t] = [];
+        grouped[t].push(d.value[1]);
+      });
+      const trend = Object.keys(grouped)
+        .map((t) => {
+          const arr = grouped[t];
+          const avg = arr.reduce((s, v) => s + v, 0) / arr.length;
+          return [Number(t), avg];
+        })
+        .sort((a, b) => a[0] - b[0]);
+      return [
+        {
+          name: bb,
+          type: "scatter",
+          symbolSize: 9,
+          data: raw,
+          itemStyle: { color: colorMap[bb] || "#2563eb" }
+        },
+        {
+          name: bb,
+          type: "line",
+          data: trend,
+          symbol: "none",
+          smooth: 0.15,
+          lineStyle: { width: 2.2, opacity: 0.85 },
+          itemStyle: { color: colorMap[bb] || "#2563eb" },
+          tooltip: { show: false },
+          emphasis: { disabled: true }
+        }
+      ];
     });
-    const years = trendPoints.map((d) => d.year);
+    const times = trendPoints.map((d) => d.time);
     const values = trendPoints.map((d) => d.value);
-    const minYear = Math.min(...years);
-    const maxYear = Math.max(...years);
+    const minTime = Math.min(...times);
+    const maxTime = Math.max(...times);
     const minVal = Math.min(...values);
     const maxVal = Math.max(...values);
     const pad = Math.max(0.5, (maxVal - minVal) * 0.12);
     chart.setOption({
       animationDuration: 450,
       color: backbones.map((bb) => colorMap[bb] || "#2563eb"),
-      grid: { left: 58, right: 24, top: 58, bottom: 52 },
+      grid: { left: 58, right: 28, top: 58, bottom: 62 },
       legend: { top: 18, textStyle: { color: "#334155", fontSize: 12 } },
       toolbox: {
         right: 8,
@@ -483,16 +514,26 @@ function LeaderboardPage({ data, methodMeta }) {
         backgroundColor: "rgba(255,255,255,0.98)",
         textStyle: { color: "#0f172a" },
         formatter: (p) => {
+          if (!p.data || !p.data.method) return "";
           const v = p.data.value;
-          return `<strong>${p.data.method}</strong><br/>Backbone: ${p.data.backbone}<br/>Year: ${v[0]}<br/>${METRIC_META[sortConfig.key].label}: ${v[1].toFixed(2)}`;
+          const dt = new Date(v[0]).toISOString().slice(0, 10);
+          return `<strong>${p.data.method}</strong><br/>Backbone: ${p.data.backbone}<br/>Date: ${dt}<br/>${METRIC_META[sortConfig.key].label}: ${v[1].toFixed(2)}`;
         }
       },
       xAxis: {
-        type: "value",
-        name: "Publication year",
-        min: minYear,
-        max: maxYear,
-        axisLabel: { color: "#64748b", formatter: (v) => `${Math.round(v)}` },
+        type: "time",
+        name: "Publication date",
+        nameLocation: "middle",
+        nameGap: 34,
+        min: minTime - 86400000 * 7,
+        max: maxTime + 86400000 * 7,
+        axisLabel: {
+          color: "#64748b",
+          formatter: (v) => {
+            const d = new Date(v);
+            return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`;
+          }
+        },
         splitLine: { lineStyle: { color: "#eef2f7" } }
       },
       yAxis: {
@@ -564,44 +605,46 @@ function LeaderboardPage({ data, methodMeta }) {
       <div className="container is-max-widescreen">
         <div className="section-header">
           <h2 className="title is-3">Leaderboard</h2>
-          <p className="section-note">Data from JSON. Click a metric header to sort; each header shows <span className="nowrap">{"\u2191\u00a0\u2193"}</span> (active direction highlighted).</p>
+          <p className="section-note">Click a metric header to sort; each header shows <span className="nowrap">{"\u2191\u00a0\u2193"}</span> (active direction highlighted).</p>
         </div>
 
-        <div className="leaderboard-controls leaderboard-controls-two">
-          <div className="field">
-            <label className="label" htmlFor="trackSelect">Track</label>
-            <div className="control">
-              <div className="select is-fullwidth">
-                <select id="trackSelect" value={track} onChange={(e) => setTrack(e.target.value)}>
-                  <option value="training_based">Training-based</option>
-                  <option value="training_free">Training-free</option>
-                </select>
+        <div className="leaderboard-toolbar">
+          <div className="leaderboard-controls leaderboard-controls-two">
+            <div className="field">
+              <label className="label" htmlFor="trackSelect">Track</label>
+              <div className="control">
+                <div className="select is-fullwidth">
+                  <select id="trackSelect" value={track} onChange={(e) => setTrack(e.target.value)}>
+                    <option value="training_based">Training-based</option>
+                    <option value="training_free">Training-free</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div className="field">
+              <label className="label" htmlFor="splitSelect">Split</label>
+              <div className="control">
+                <div className="select is-fullwidth">
+                  <select id="splitSelect" value={split} onChange={(e) => setSplit(e.target.value)}>
+                    <option value="simple">Simple</option>
+                    <option value="regular">Regular</option>
+                    <option value="complex">Complex</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
-          <div className="field">
-            <label className="label" htmlFor="splitSelect">Split</label>
-            <div className="control">
-              <div className="select is-fullwidth">
-                <select id="splitSelect" value={split} onChange={(e) => setSplit(e.target.value)}>
-                  <option value="simple">Simple</option>
-                  <option value="regular">Regular</option>
-                  <option value="complex">Complex</option>
-                </select>
-              </div>
-            </div>
+          <div className="leaderboard-export-row">
+            <button className="button is-light export-btn" onClick={exportCurrentTable}>
+              <span className="icon"><i className="fas fa-download" /></span>
+              <span>Export CSV</span>
+            </button>
           </div>
-        </div>
-        <div className="leaderboard-export-row">
-          <button className="button is-light is-small export-btn" onClick={exportCurrentTable}>
-            <span className="icon"><i className="fas fa-download" /></span>
-            <span>Export CSV (current view)</span>
-          </button>
         </div>
 
         <div className="metric-trend-wrap">
           <h3 className="title is-5 metric-trend-title">
-            {METRIC_META[sortConfig.key].label} vs Publication Year (current view)
+            {METRIC_META[sortConfig.key].label} vs Publication Date (current view)
           </h3>
           {trendPoints.length < 2 ? (
             <p className="section-note">Not enough methods with valid year/metric to render chart.</p>
@@ -617,13 +660,13 @@ function LeaderboardPage({ data, methodMeta }) {
                 <th>Rank</th>
                 <th>Method</th>
                 <th>Backbone</th>
-                <SortableHeader label="mIoU" metricKey="miou" sortConfig={sortConfig} onSort={handleSort} />
-                <SortableHeader label="O-mIoU" metricKey="omiou" sortConfig={sortConfig} onSort={handleSort} />
-                <SortableHeader label="SRE" metricKey="sre" sortConfig={sortConfig} onSort={handleSort} />
-                <SortableHeader label="SRR" metricKey="srr" sortConfig={sortConfig} onSort={handleSort} />
-                <SortableHeader label="CLIPG" metricKey="clip_global" sortConfig={sortConfig} onSort={handleSort} />
-                <SortableHeader label="CLIPL" metricKey="clip_local" sortConfig={sortConfig} onSort={handleSort} />
-                <SortableHeader label="FID" metricKey="fid" sortConfig={sortConfig} onSort={handleSort} />
+                <SortableHeader label={<>mIoU(%)</>} metricKey="miou" sortConfig={sortConfig} onSort={handleSort} />
+                <SortableHeader label={<>O-mIoU(%)</>} metricKey="omiou" sortConfig={sortConfig} onSort={handleSort} />
+                <SortableHeader label={<>SR<sub>E</sub>(%)</>} metricKey="sre" sortConfig={sortConfig} onSort={handleSort} />
+                <SortableHeader label={<>SR<sub>R</sub>(%)</>} metricKey="srr" sortConfig={sortConfig} onSort={handleSort} />
+                <SortableHeader label={<>CLIP<sub>Global</sub></>} metricKey="clip_global" sortConfig={sortConfig} onSort={handleSort} />
+                <SortableHeader label={<>CLIP<sub>Local</sub></>} metricKey="clip_local" sortConfig={sortConfig} onSort={handleSort} />
+                <SortableHeader label={<>FID</>} metricKey="fid" sortConfig={sortConfig} onSort={handleSort} />
               </tr>
             </thead>
             <tbody>
@@ -781,12 +824,6 @@ function App() {
       {page === "overview" && <OverviewPage />}
       {page === "leaderboard" && <LeaderboardPage data={data} methodMeta={methodMeta} />}
       {page === "contact" && <ContactPage />}
-
-      <footer className="footer">
-        <div className="container has-text-centered">
-          <p>Built on top of the <a href="https://github.com/nerfies/nerfies.github.io">nerfies template</a>.</p>
-        </div>
-      </footer>
     </>
   );
 }
