@@ -1,4 +1,4 @@
-const { useEffect, useMemo, useState } = React;
+const { useEffect, useMemo, useRef, useState } = React;
 
 const METRIC_META = {
   miou: { label: "mIoU", higherIsBetter: true },
@@ -38,6 +38,12 @@ function rankRows(rows, sortKey, sortDirection) {
     if (sortDirection === "asc") return aVal - bVal;
     return bVal - aVal;
   });
+}
+
+function parsePubYear(pubText) {
+  if (!pubText) return null;
+  const match = String(pubText).match(/(19|20)\d{2}/);
+  return match ? Number(match[0]) : null;
 }
 
 function getPageFromHash() {
@@ -406,6 +412,7 @@ function LeaderboardPage({ data, methodMeta }) {
   const [track, setTrack] = useState("training_based");
   const [split, setSplit] = useState("simple");
   const [sortConfig, setSortConfig] = useState({ key: "omiou", direction: "desc" });
+  const trendChartRef = useRef(null);
 
   useEffect(() => {
     setSortConfig({ key: "omiou", direction: "desc" });
@@ -413,6 +420,102 @@ function LeaderboardPage({ data, methodMeta }) {
 
   const rows = useMemo(() => data[track][split] || [], [data, track, split]);
   const ranked = useMemo(() => rankRows(rows, sortConfig.key, sortConfig.direction), [rows, sortConfig]);
+  const trendPoints = useMemo(() => {
+    return ranked
+      .map((row) => {
+        const year = parsePubYear(methodMeta[row.method]?.pub);
+        const metricValue = row[sortConfig.key];
+        const missingMetric = metricValue === "N/A" || metricValue === null || metricValue === undefined || Number.isNaN(Number(metricValue));
+        if (!year || missingMetric) return null;
+        return { method: row.method, backbone: row.backbone, year, value: Number(metricValue) };
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.year - b.year || a.method.localeCompare(b.method));
+  }, [ranked, sortConfig, methodMeta]);
+
+  useEffect(() => {
+    if (!trendChartRef.current || trendPoints.length < 2 || !window.echarts) return undefined;
+    const chart = window.echarts.init(trendChartRef.current);
+    const backbones = [...new Set(trendPoints.map((d) => d.backbone))];
+    const colorMap = {
+      "U-Net": "#0ea5e9",
+      "DiT": "#8b5cf6",
+      "AR": "#f59e0b"
+    };
+    const series = backbones.map((bb) => {
+      const dataPoints = trendPoints
+        .filter((d) => d.backbone === bb)
+        .map((d) => ({ value: [d.year, d.value], method: d.method, backbone: d.backbone }));
+      return {
+        name: bb,
+        type: "line",
+        showSymbol: true,
+        symbolSize: 8,
+        smooth: true,
+        connectNulls: false,
+        data: dataPoints,
+        lineStyle: { width: 2.5 },
+        itemStyle: { color: colorMap[bb] || "#2563eb" }
+      };
+    });
+    const years = trendPoints.map((d) => d.year);
+    const values = trendPoints.map((d) => d.value);
+    const minYear = Math.min(...years);
+    const maxYear = Math.max(...years);
+    const minVal = Math.min(...values);
+    const maxVal = Math.max(...values);
+    const pad = Math.max(0.5, (maxVal - minVal) * 0.12);
+    chart.setOption({
+      animationDuration: 450,
+      color: backbones.map((bb) => colorMap[bb] || "#2563eb"),
+      grid: { left: 58, right: 24, top: 58, bottom: 52 },
+      legend: { top: 18, textStyle: { color: "#334155", fontSize: 12 } },
+      toolbox: {
+        right: 8,
+        feature: {
+          saveAsImage: { title: "Save" },
+          restore: { title: "Reset" }
+        }
+      },
+      tooltip: {
+        trigger: "item",
+        borderColor: "#e2e8f0",
+        backgroundColor: "rgba(255,255,255,0.98)",
+        textStyle: { color: "#0f172a" },
+        formatter: (p) => {
+          const v = p.data.value;
+          return `<strong>${p.data.method}</strong><br/>Backbone: ${p.data.backbone}<br/>Year: ${v[0]}<br/>${METRIC_META[sortConfig.key].label}: ${v[1].toFixed(2)}`;
+        }
+      },
+      xAxis: {
+        type: "value",
+        name: "Publication year",
+        min: minYear,
+        max: maxYear,
+        axisLabel: { color: "#64748b", formatter: (v) => `${Math.round(v)}` },
+        splitLine: { lineStyle: { color: "#eef2f7" } }
+      },
+      yAxis: {
+        type: "value",
+        name: METRIC_META[sortConfig.key].label,
+        min: minVal - pad,
+        max: maxVal + pad,
+        axisLabel: { color: "#64748b" },
+        splitLine: { lineStyle: { color: "#e2e8f0" } }
+      },
+      dataZoom: [
+        { type: "inside", filterMode: "none" },
+        { type: "slider", height: 18, bottom: 8 }
+      ],
+      series
+    });
+    const onResize = () => chart.resize();
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      chart.dispose();
+    };
+  }, [trendPoints, sortConfig]);
 
   function handleSort(metricKey) {
     setSortConfig((prev) => {
@@ -496,6 +599,17 @@ function LeaderboardPage({ data, methodMeta }) {
           </button>
         </div>
 
+        <div className="metric-trend-wrap">
+          <h3 className="title is-5 metric-trend-title">
+            {METRIC_META[sortConfig.key].label} vs Publication Year (current view)
+          </h3>
+          {trendPoints.length < 2 ? (
+            <p className="section-note">Not enough methods with valid year/metric to render chart.</p>
+          ) : (
+            <div ref={trendChartRef} className="metric-trend-echart" />
+          )}
+        </div>
+
         <div className="table-container leaderboard-table-wrap">
           <table className="table is-fullwidth is-striped is-hoverable leaderboard-table">
             <thead>
@@ -522,7 +636,7 @@ function LeaderboardPage({ data, methodMeta }) {
                     </span>
                     {methodMeta[row.method]?.isNew ? <span className="new-tag">NEW</span> : null}
                     <div className="method-submeta">
-                      <span className="pub-chip">Pub: {methodMeta[row.method]?.pub || "N/A"}</span>
+                      <span className="pub-chip">{methodMeta[row.method]?.pub || "N/A"}</span>
                       {methodMeta[row.method]?.paper ? (
                         <a className="mini-link-btn" href={methodMeta[row.method].paper} target="_blank" rel="noopener noreferrer">Paper</a>
                       ) : (

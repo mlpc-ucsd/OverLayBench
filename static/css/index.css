@@ -161,6 +161,67 @@ img {
   border: 1px solid #d1d5db;
 }
 
+.metric-trend-wrap {
+  margin-bottom: 1rem;
+  padding: 0.9rem 1rem 0.8rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.metric-trend-title {
+  margin-bottom: 0.45rem !important;
+}
+
+.metric-trend-chart {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.metric-trend-echart {
+  width: 100%;
+  height: 320px;
+}
+
+.chart-axis {
+  stroke: #64748b;
+  stroke-width: 1.2;
+}
+
+.chart-grid {
+  stroke: #e2e8f0;
+  stroke-width: 1;
+}
+
+.chart-grid-vertical {
+  stroke: #f1f5f9;
+  stroke-width: 1;
+}
+
+.chart-line {
+  stroke: #2563eb;
+  stroke-width: 2.2;
+  opacity: 0.85;
+}
+
+.chart-point {
+  fill: #0ea5e9;
+  stroke: #ffffff;
+  stroke-width: 1.3;
+}
+
+.chart-tick {
+  fill: #64748b;
+  font-size: 11px;
+}
+
+.chart-axis-label {
+  fill: #334155;
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .leaderboard-controls .label {
   margin-bottom: 0.45rem;
   color: #334155;
