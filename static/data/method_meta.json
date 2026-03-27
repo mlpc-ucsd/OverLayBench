@@ -1,0 +1,19 @@
+{
+  "GLIGEN": { "paper": "https://arxiv.org/abs/2301.07093", "code": "https://github.com/gligen/GLIGEN", "pub": "CVPR 2023" },
+  "InstanceDiff": { "paper": "https://arxiv.org/abs/2402.03290", "code": "https://github.com/frank-xwang/InstanceDiffusion", "pub": "CVPR 2024" },
+  "MIGC": { "paper": "https://arxiv.org/abs/2405.18886", "code": "https://github.com/limuloo/MIGC", "pub": "CVPR 2024" },
+  "HiCo": { "paper": "https://arxiv.org/abs/2410.14324", "code": null, "pub": "arXiv 2024" },
+  "3DIS": { "paper": "https://arxiv.org/abs/2410.12669", "code": null, "pub": "arXiv 2024" },
+  "ELIGEN": { "paper": "https://arxiv.org/abs/2501.01097", "code": "https://github.com/FrankZxShen/ELLA", "pub": "arXiv 2025" },
+  "CreatiLayout-SD3": { "paper": "https://arxiv.org/abs/2412.03859", "code": "https://github.com/limuloo/CreatiLayout", "pub": "arXiv 2024" },
+  "CreatiLayout-FLUX": { "paper": "https://arxiv.org/abs/2412.03859", "code": "https://github.com/limuloo/CreatiLayout", "pub": "arXiv 2024" },
+  "DreamRender": { "paper": "https://arxiv.org/abs/2503.12885", "code": null, "pub": "arXiv 2025" },
+  "InstanceAssemble": { "paper": null, "code": null, "pub": "TBD", "isNew": true },
+  "Laytrol": { "paper": null, "code": null, "pub": "TBD", "isNew": true },
+  "PlanGen": { "paper": null, "code": null, "pub": "TBD", "isNew": true },
+  "BoxDiff": { "paper": "https://arxiv.org/abs/2307.10816", "code": "https://github.com/showlab/BoxDiff", "pub": "ICCV 2023" },
+  "LayoutGuidance": { "paper": "https://arxiv.org/abs/2403.09093", "code": null, "pub": "WACV 2024" },
+  "R&B": { "paper": "https://arxiv.org/abs/2411.06558", "code": null, "pub": "arXiv 2024" },
+  "GroundDiT": { "paper": "https://arxiv.org/abs/2405.13195", "code": null, "pub": "NeurIPS 2024" },
+  "RegionalPrompting": { "paper": "https://arxiv.org/abs/2411.02395", "code": "https://github.com/kaist-cvml/Regional-Prompting-FLUX", "pub": "arXiv 2024" }
+}

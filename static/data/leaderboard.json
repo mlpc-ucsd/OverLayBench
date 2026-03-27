@@ -1,0 +1,75 @@
+{
+  "training_based": {
+    "simple": [
+      { "method": "GLIGEN", "backbone": "U-Net", "miou": 60.54, "omiou": 36.22, "sre": 49.99, "srr": 78.72, "clip_global": 34.17, "clip_local": 24.75, "fid": 31.27 },
+      { "method": "InstanceDiff", "backbone": "U-Net", "miou": 71.21, "omiou": 49.99, "sre": 77.71, "srr": 87.49, "clip_global": 34.25, "clip_local": 27.69, "fid": 36.17 },
+      { "method": "MIGC", "backbone": "U-Net", "miou": 58.64, "omiou": 32.15, "sre": 63.41, "srr": 81.60, "clip_global": 33.07, "clip_local": 26.49, "fid": 31.64 },
+      { "method": "HiCo", "backbone": "U-Net", "miou": 69.47, "omiou": 47.23, "sre": 67.75, "srr": 86.08, "clip_global": 35.25, "clip_local": 27.04, "fid": 29.21 },
+      { "method": "3DIS", "backbone": "DiT", "miou": 65.75, "omiou": 38.38, "sre": 86.24, "srr": 86.98, "clip_global": 35.85, "clip_local": 29.67, "fid": 29.18 },
+      { "method": "ELIGEN", "backbone": "DiT", "miou": 68.17, "omiou": 43.72, "sre": 86.50, "srr": 89.67, "clip_global": 36.65, "clip_local": 28.29, "fid": 28.87 },
+      { "method": "CreatiLayout-SD3", "backbone": "DiT", "miou": 58.78, "omiou": 32.52, "sre": 72.34, "srr": 84.45, "clip_global": 37.29, "clip_local": 27.49, "fid": 27.51 },
+      { "method": "CreatiLayout-FLUX", "backbone": "DiT", "miou": 71.17, "omiou": 49.80, "sre": 84.35, "srr": 90.87, "clip_global": 37.40, "clip_local": 20.18, "fid": 23.79 },
+      { "method": "DreamRender", "backbone": "DiT", "miou": 67.60, "omiou": 43.45, "sre": 88.80, "srr": 90.07, "clip_global": 37.29, "clip_local": 30.11, "fid": 24.91 },
+      { "method": "InstanceAssemble", "backbone": "DiT", "miou": 76.08, "omiou": 56.02, "sre": 76.65, "srr": 87.86, "clip_global": 37.07, "clip_local": 28.61, "fid": "N/A" },
+      { "method": "Laytrol", "backbone": "DiT", "miou": 74.86, "omiou": 56.42, "sre": 86.02, "srr": 91.22, "clip_global": 37.06, "clip_local": 28.64, "fid": "N/A" },
+      { "method": "PlanGen", "backbone": "AR", "miou": 62.94, "omiou": 38.54, "sre": 82.62, "srr": 90.53, "clip_global": 35.62, "clip_local": 27.73, "fid": "N/A" },
+      { "method": "CycleGen", "backbone": "AR", "miou": 64.84, "omiou": 42.03, "sre": 85.05, "srr": 90.53, "clip_global": 35.48, "clip_local": 27.89, "fid": "N/A" }
+    ],
+    "regular": [
+      { "method": "GLIGEN", "backbone": "U-Net", "miou": 52.46, "omiou": 26.53, "sre": 44.88, "srr": 77.46, "clip_global": 33.93, "clip_local": 23.42, "fid": 52.22 },
+      { "method": "InstanceDiff", "backbone": "U-Net", "miou": 60.08, "omiou": 34.15, "sre": 72.51, "srr": 83.36, "clip_global": 33.09, "clip_local": 26.19, "fid": 59.73 },
+      { "method": "MIGC", "backbone": "U-Net", "miou": 47.42, "omiou": 20.06, "sre": 56.67, "srr": 77.85, "clip_global": 32.72, "clip_local": 24.99, "fid": 54.24 },
+      { "method": "HiCo", "backbone": "U-Net", "miou": 55.02, "omiou": 29.60, "sre": 58.24, "srr": 79.89, "clip_global": 33.91, "clip_local": 25.34, "fid": 49.07 },
+      { "method": "3DIS", "backbone": "DiT", "miou": 55.66, "omiou": 27.29, "sre": 80.80, "srr": 83.69, "clip_global": 35.42, "clip_local": 28.12, "fid": 48.56 },
+      { "method": "ELIGEN", "backbone": "DiT", "miou": 58.56, "omiou": 32.62, "sre": 80.85, "srr": 84.42, "clip_global": 36.27, "clip_local": 27.05, "fid": 45.65 },
+      { "method": "CreatiLayout-SD3", "backbone": "DiT", "miou": 47.04, "omiou": 20.67, "sre": 62.60, "srr": 78.31, "clip_global": 36.67, "clip_local": 25.55, "fid": 45.57 },
+      { "method": "CreatiLayout-FLUX", "backbone": "DiT", "miou": 59.72, "omiou": 35.51, "sre": 77.20, "srr": 86.39, "clip_global": 36.73, "clip_local": 26.21, "fid": 41.51 },
+      { "method": "DreamRender", "backbone": "DiT", "miou": 58.08, "omiou": 33.00, "sre": 83.52, "srr": 84.95, "clip_global": 36.85, "clip_local": 28.74, "fid": 42.66 },
+      { "method": "InstanceAssemble", "backbone": "DiT", "miou": 66.00, "omiou": 41.05, "sre": 69.53, "srr": 82.75, "clip_global": 36.29, "clip_local": 26.99, "fid": "N/A" },
+      { "method": "Laytrol", "backbone": "DiT", "miou": 65.18, "omiou": 42.86, "sre": 80.26, "srr": 86.75, "clip_global": 36.71, "clip_local": 27.00, "fid": "N/A" },
+      { "method": "PlanGen", "backbone": "AR", "miou": 53.24, "omiou": 27.57, "sre": 78.02, "srr": 87.40, "clip_global": 35.03, "clip_local": 26.25, "fid": "N/A" },
+      { "method": "CycleGen", "backbone": "AR", "miou": 54.21, "omiou": 29.04, "sre": 80.58, "srr": 87.98, "clip_global": 34.74, "clip_local": 26.42, "fid": "N/A" }
+    ],
+    "complex": [
+      { "method": "GLIGEN", "backbone": "U-Net", "miou": 50.79, "omiou": 23.85, "sre": 41.70, "srr": 79.93, "clip_global": 33.92, "clip_local": 22.75, "fid": 57.32 },
+      { "method": "InstanceDiff", "backbone": "U-Net", "miou": 53.68, "omiou": 25.63, "sre": 66.02, "srr": 80.34, "clip_global": 32.33, "clip_local": 25.53, "fid": 66.32 },
+      { "method": "MIGC", "backbone": "U-Net", "miou": 40.04, "omiou": 13.26, "sre": 47.80, "srr": 74.48, "clip_global": 31.93, "clip_local": 24.20, "fid": 66.52 },
+      { "method": "HiCo", "backbone": "U-Net", "miou": 46.56, "omiou": 20.35, "sre": 48.88, "srr": 75.19, "clip_global": 33.15, "clip_local": 24.41, "fid": 55.78 },
+      { "method": "3DIS", "backbone": "DiT", "miou": 50.65, "omiou": 21.75, "sre": 74.31, "srr": 81.57, "clip_global": 35.11, "clip_local": 27.35, "fid": 54.90 },
+      { "method": "ELIGEN", "backbone": "DiT", "miou": 52.53, "omiou": 26.19, "sre": 74.03, "srr": 84.09, "clip_global": 36.18, "clip_local": 25.92, "fid": 50.41 },
+      { "method": "CreatiLayout-SD3", "backbone": "DiT", "miou": 44.24, "omiou": 18.05, "sre": 52.10, "srr": 79.98, "clip_global": 36.55, "clip_local": 24.76, "fid": 53.29 },
+      { "method": "CreatiLayout-FLUX", "backbone": "DiT", "miou": 54.50, "omiou": 28.97, "sre": 69.72, "srr": 86.45, "clip_global": 36.72, "clip_local": 24.85, "fid": 45.66 },
+      { "method": "DreamRender", "backbone": "DiT", "miou": 52.47, "omiou": 26.13, "sre": 77.87, "srr": 84.93, "clip_global": 36.75, "clip_local": 27.54, "fid": 48.11 },
+      { "method": "InstanceAssemble", "backbone": "DiT", "miou": 61.17, "omiou": 33.96, "sre": 60.17, "srr": 83.96, "clip_global": 36.10, "clip_local": 25.99, "fid": "N/A" },
+      { "method": "Laytrol", "backbone": "DiT", "miou": 61.49, "omiou": 37.82, "sre": 72.77, "srr": 86.08, "clip_global": 36.57, "clip_local": 25.78, "fid": "N/A" },
+      { "method": "PlanGen", "backbone": "AR", "miou": 49.87, "omiou": 22.94, "sre": 72.82, "srr": 86.80, "clip_global": 35.09, "clip_local": 25.37, "fid": "N/A" },
+      { "method": "CycleGen", "backbone": "AR", "miou": 50.72, "omiou": 24.50, "sre": 74.01, "srr": 87.07, "clip_global": 34.57, "clip_local": 25.58, "fid": "N/A" }
+    ]
+  },
+  "training_free": {
+    "simple": [
+      { "method": "BoxDiff", "backbone": "U-Net", "miou": 24.48, "omiou": 7.71, "sre": 42.03, "srr": 69.94, "clip_global": 36.78, "clip_local": 21.33, "fid": 34.65 },
+      { "method": "LayoutGuidance", "backbone": "U-Net", "miou": 23.12, "omiou": 7.92, "sre": 45.78, "srr": 70.83, "clip_global": 33.47, "clip_local": 21.22, "fid": 74.40 },
+      { "method": "R&B", "backbone": "U-Net", "miou": 27.78, "omiou": 9.70, "sre": 36.98, "srr": 64.05, "clip_global": 34.64, "clip_local": 21.32, "fid": 36.57 },
+      { "method": "GroundDiT", "backbone": "DiT", "miou": 31.92, "omiou": 10.93, "sre": 48.57, "srr": 75.26, "clip_global": 36.10, "clip_local": 22.73, "fid": 34.98 },
+      { "method": "RegionalPrompting", "backbone": "DiT", "miou": 42.54, "omiou": 20.10, "sre": 73.49, "srr": 75.81, "clip_global": 35.45, "clip_local": 27.40, "fid": 23.94 },
+      { "method": "DepthArb", "backbone": "U-Net", "miou": 28.63, "omiou": 13.97, "sre": 51.67, "srr": 73.34, "clip_global": 38.14, "clip_local": 24.66, "fid": "N/A" }
+    ],
+    "regular": [
+      { "method": "BoxDiff", "backbone": "U-Net", "miou": 19.40, "omiou": 5.33, "sre": 37.58, "srr": 71.81, "clip_global": 36.50, "clip_local": 19.97, "fid": 55.41 },
+      { "method": "LayoutGuidance", "backbone": "U-Net", "miou": 15.81, "omiou": 4.51, "sre": 44.94, "srr": 72.76, "clip_global": 31.76, "clip_local": 20.05, "fid": 128.16 },
+      { "method": "R&B", "backbone": "U-Net", "miou": 20.35, "omiou": 5.54, "sre": 32.85, "srr": 65.01, "clip_global": 34.49, "clip_local": 19.88, "fid": 58.55 },
+      { "method": "GroundDiT", "backbone": "DiT", "miou": 24.03, "omiou": 6.70, "sre": 42.24, "srr": 74.02, "clip_global": 36.00, "clip_local": 21.10, "fid": 54.94 },
+      { "method": "RegionalPrompting", "backbone": "DiT", "miou": 32.72, "omiou": 12.29, "sre": 63.74, "srr": 67.08, "clip_global": 34.46, "clip_local": 25.82, "fid": 43.13 },
+      { "method": "DepthArb", "backbone": "U-Net", "miou": 23.46, "omiou": 7.14, "sre": 45.45, "srr": 73.07, "clip_global": 36.00, "clip_local": 22.50, "fid": "N/A" }
+    ],
+    "complex": [
+      { "method": "BoxDiff", "backbone": "U-Net", "miou": 20.02, "omiou": 5.21, "sre": 33.52, "srr": 76.41, "clip_global": 36.92, "clip_local": 19.91, "fid": 59.70 },
+      { "method": "LayoutGuidance", "backbone": "U-Net", "miou": 16.34, "omiou": 4.01, "sre": 37.76, "srr": 75.53, "clip_global": 32.75, "clip_local": 19.72, "fid": 119.32 },
+      { "method": "R&B", "backbone": "U-Net", "miou": 19.80, "omiou": 4.85, "sre": 28.38, "srr": 69.97, "clip_global": 34.57, "clip_local": 19.47, "fid": 63.71 },
+      { "method": "GroundDiT", "backbone": "DiT", "miou": 24.77, "omiou": 6.58, "sre": 37.85, "srr": 77.03, "clip_global": 36.20, "clip_local": 20.55, "fid": 55.59 },
+      { "method": "RegionalPrompting", "backbone": "DiT", "miou": 28.35, "omiou": 9.05, "sre": 53.56, "srr": 60.37, "clip_global": 33.34, "clip_local": 25.29, "fid": 49.41 },
+      { "method": "DepthArb", "backbone": "U-Net", "miou": 34.22, "omiou": 13.56, "sre": 74.29, "srr": 77.13, "clip_global": 36.30, "clip_local": 25.99, "fid": "N/A" }
+    ]
+  }
+}
