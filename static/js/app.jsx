@@ -411,6 +411,17 @@ function OverviewPage() {
   journal={arXiv preprint arXiv:2509.19282},
   year={2025}
 }`}</code></pre>
+        <pre><code>{`@inproceedings{NEURIPS2025_329ad516,
+ author = {Li, Bingnan and Wang, Chen-Yu and Xu, Haiyang and Zhang, Xiang and Armand, Ethan and Srivastava, Divyansh and Xiaojun, Shan and Chen, Zeyuan and Xie, Jianwen and Tu, Zhuowen},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {D. Belgrave and C. Zhang and H. Lin and R. Pascanu and P. Koniusz and M. Ghassemi and N. Chen},
+ pages = {},
+ publisher = {Curran Associates, Inc.},
+ title = {OverLayBench: A Benchmark for Layout-to-Image Generation with Dense Overlaps},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2025/file/329ad516cf7a6ac306f29882e9c77558-Paper-Datasets_and_Benchmarks_Track.pdf},
+ volume = {38},
+ year = {2025}
+}`}</code></pre>
         </div>
       </section>
     </>
