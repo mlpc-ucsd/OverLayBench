@@ -67,54 +67,77 @@ scenarios.
 
 ## 🚀 Quick Start
 
-### 🤖 Install Dependencies
+### 🤖 Installation
 
-If you are using Multi-GPUs, we recommend you to use [vllm](https://github.com/vllm-project/vllm) for accelerated inference.
+`overlaybenchpytools` is a regular Python package (Python ≥ 3.9). The recommended setup uses
+[vLLM](https://github.com/vllm-project/vllm) for the Qwen2.5-VL-32B judge:
 
 ```bash
+pip install "overlaybenchpytools[all] @ git+https://github.com/mlpc-ucsd/OverLayBench.git"
+# or from a clone
 git clone https://github.com/mlpc-ucsd/OverLayBench.git
 cd OverLayBench
-conda create -n overlaybench python=3.10.16 --yes
-conda activate overlaybench
-bash install_vllm.sh
+pip install -e ".[all]"
 ```
-Otherwise, you may also choose to use the default huggingface transformers, which is slower but more stable.
-```bash
-git clone https://github.com/mlpc-ucsd/OverLayBench.git
-cd OverLayBench
-conda create -n overlaybench python=3.10.16 --yes
-conda activate overlaybench
-bash install.sh
-```
+
+`[all]` is `[vllm]`, which pins vLLM 0.8.5 and the transformers and qwen-vl-utils versions behind the reference numbers,
+plus `[fid]` (pyiqa). Without vLLM, `pip install -e ".[fid]"` and `flash-attn` give the slower transformers judge
+(`--backend hf`).
 
 ### 🧪 Evaluate Your Own Model!
-OverLayBenchMeter assumes that the generated images are organized in the following structure:
+
+Put the generated images in the following structure:
 ```
 EXP_NAME
 ├── simple
-│   ├── seed_1
-│   │   ├── img_id_1.png
-│   │   ├── img_id_2.png
-│   │   ├── img_id_3.png
-│   │   └── ...
-│   ├── seed_2
-│   └── seed_3
+│   ├── seed_1
+│   │   ├── img_id_1.png
+│   │   ├── img_id_2.png
+│   │   └── ...
+│   ├── seed_2
+│   └── seed_3
 ├── medium
-│   ├── seed_1
-│   ├── seed_2
-│   └── seed_3
+│   └── ...
 └── hard
-    ├── seed_1
-    ├── seed_2
-    └── seed_3
+    └── ...
 ```
 
-For `vllm` based inference:
+**Command line**
+
+```bash
+# every split and seed folder, all metrics, one judge engine on all visible GPUs
+overlaybench-eval --root EXP_NAME --save-dir metrics/EXP_NAME
+
+# CLIPScore and FID only: the judge is not loaded
+overlaybench-eval --root EXP_NAME --metrics clip fid
+
+# 8 GPUs as four judge engines with 2 GPUs each, the three judge tasks of a split in one pass
+overlaybench-eval --root EXP_NAME --dp 4 --tp 2 --merge-judge-tasks \
+    --gpu-memory-utilization 0.9 --vllm-arg max_model_len=32768
+```
+
+CLIPScore and FID of every split and seed are computed first; the judge is then loaded once for mIoU, O-mIoU, SR_E and
+SR_R. `--resume` reuses the outputs already in `--save-dir`, so an interrupted run continues where it stopped. The run
+ends with a table of mean ± std over seeds (also saved as `summary.json`). See `overlaybench-eval -h` for all options;
+`python -m overlaybenchpytools` is the same command.
+
+The judge takes almost all of the time. `--dp` runs several vLLM engines on disjoint GPUs and splits every split
+between them. With 2 GPUs per engine, 48 GB GPUs need `max_model_len=32768` (the judge prompts are about 2k tokens) to
+leave room for the KV cache. Judge time for OverLayBench-Regular (`medium`, 3,000 prompts) on RTX 6000 Ada (48 GB, PCIe);
+with the last setup a full run (three splits, all metrics, one seed) takes 61 minutes:
+
+| Judge setup | GPUs | Time |
+|---|:---:|:---:|
+| one engine, `--tp 4` (as the original toolkit) | 4 | 37 min |
+| `--dp 2 --tp 4 --merge-judge-tasks` | 8 | 18 min |
+| `--dp 4 --tp 2 --merge-judge-tasks` (see above) | 8 | 15 min |
+
+**Python**
+
+The original interface still works:
 
 ```python
-from overlaybenchpytools.meter import OverLayBenchMeter
-import os
-os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
+from overlaybenchpytools import OverLayBenchMeter
 
 if __name__ == "__main__":
     meter = OverLayBenchMeter(
@@ -127,47 +150,43 @@ if __name__ == "__main__":
         meter.evaluate()
 ```
 
-For `transformers` based inference, please remove the `use_vllm` and the `vllm_args` argument and set `bs_qwen` to a reasonable size.
+`meter.run(splits, seeds)` does the same for every split and seed, CLIPScore and FID first. New keyword arguments:
+`metrics` (any of `clip`, `fid`, `bbox` for mIoU/O-mIoU, `entity` for SR_E, `relation` for SR_R),
+`data_parallel_size`, `merge_judge_tasks`, `num_workers`, `cache_dir`, `fid_args` and `resume`.
+For the transformers judge, drop `use_vllm` and `vllm_args` and set `bs_qwen` to a batch size that fits.
 
-```python
-from overlaybenchpytools.meter import OverLayBenchMeter
-import os
-os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
+`OverLayBenchMeter` covers `mIoU`, `Overlay mIoU (O-mIoU)`, `Entity Success Rate (SR_E)`, `Relationship Success Rate
+(SR_R)`, `Global CLIPScore`, `Local CLIPScore` and `FID`. FID follows the clean-fid protocol of
+[IQA-PyTorch](https://github.com/chaofengc/IQA-PyTorch) (InceptionV3) between the generated images of a split and its GT
+images, which are exported from the dataset once; their features are cached in `cache_dir`
+(default `$OVERLAYBENCH_CACHE` or `~/.cache/overlaybench`).
 
-if __name__ == "__main__":
-    meter = OverLayBenchMeter(
-        root='{YOUR_GENERATED_IMAGES_DIR}',
-        extension='png', save_dir='./metrics',
-        resolution=1024, bs_qwen=8)
-    for split in ["simple", "medium", "hard"]:
-        meter.set_split(split, '{YOUR_SEED}')
-        meter.evaluate()
-```
+**Reproducibility.** CLIPScore and FID are bit-identical to the original toolkit, and the judge receives byte-identical
+prompts and images. The judge outputs themselves are not bit-reproducible with vLLM: even two runs with the same
+settings on the same GPUs disagree on 0.2–0.7% of the entity and relationship answers (OverLayBench-Regular), which
+moves mIoU, O-mIoU, SR_E and SR_R by up to 0.3 points. The settings above stay within the same range: ten runs of
+Regular with the original toolkit, the defaults, `--dp`, `--tp 2`, `--merge-judge-tasks` and other vLLM settings are all
+within 0.4 points of each other on every metric.
 
-`OverLayBenchMeter` covers the evaluation of `mIoU`, `Overlay mIoU(o-mIoU)`, `Entity Success Rate (SR_E)`,
-`Relashionship Success Rate (SR_R)`, `Relationship Success Rate (SR_R)`, `Global CLIPScore` and `Local CLIPScore`.
-For `FID`, please refer to the [IQA-PyTorch](https://github.com/chaofengc/IQA-PyTorch) package.
-
-The expected log file structure is as follows:
+The outputs are organized as follows:
 ```metrics
 metrics
 ├── overlay_bench.log
+├── summary.json                          # mean ± std over seeds (meter.run / overlaybench-eval)
 ├── simple
-│   ├── seed_1
-│   │   ├── baseline_bbox_predictions.json
-│   │   ├── entity_VQA.json
-│   │   ├── relation_VQA.json
-│   │   └── ...
-│   ├── seed_2
-│   └── seed_3
+│   ├── seed_1
+│   │   ├── baseline_bbox_predictions.json
+│   │   ├── entity_VQA.json
+│   │   ├── relation_VQA.json
+│   │   ├── clip_score.json
+│   │   ├── fid.json
+│   │   └── results.json                  # all metrics of this split and seed
+│   ├── seed_2
+│   └── seed_3
 ├── medium
-│   ├── seed_1
-│   ├── seed_2
-│   └── seed_3
+│   └── ...
 └── hard
-    ├── seed_1
-    ├── seed_2
-    └── seed_3
+    └── ...
 ```
 
 ![qual-res.jpg](images/qual-res.jpg)

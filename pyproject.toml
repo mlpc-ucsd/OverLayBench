@@ -1,15 +1,44 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "overlaybenchpytools"
-version = "0.1.0"
-description = "A Python evaluation tool"
+dynamic = ["version"]
+description = "Evaluation toolkit for OverLayBench, a layout-to-image benchmark with dense overlaps"
 authors = [{ name="Bingnan Li", email="libn.152b4a@gmail.com" }]
 readme = "README.md"
 license = { text = "MIT" }
-dependencies = []
+requires-python = ">=3.9"
+dependencies = [
+    "datasets>=2.19",
+    "numpy",
+    "open_clip_torch>=2.24",
+    "pillow",
+    "prettytable",
+    "qwen-vl-utils>=0.0.8",
+    "torch>=2.1",
+    "torchvision",
+    "tqdm",
+    "transformers>=4.49",
+]
+
+[project.optional-dependencies]
+# The judge stack the reference numbers were computed with.
+vllm = ["vllm==0.8.5", "transformers==4.51.3", "qwen-vl-utils==0.0.14"]
+fid = ["pyiqa>=0.1.15"]
+all = ["overlaybenchpytools[vllm,fid]"]
+
+[project.scripts]
+overlaybench-eval = "overlaybenchpytools.cli:main"
+
+[project.urls]
+Homepage = "https://mlpc-ucsd.github.io/OverLayBench/"
+Repository = "https://github.com/mlpc-ucsd/OverLayBench"
+Paper = "https://arxiv.org/abs/2509.19282"
 
 [tool.setuptools]
 packages = { find = { include = ["overlaybenchpytools*"], where = ["."] } }
+
+[tool.setuptools.dynamic]
+version = { attr = "overlaybenchpytools.__version__" }
