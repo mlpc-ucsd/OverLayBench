@@ -8,13 +8,14 @@ from PIL import Image
 from tqdm import tqdm
 from .utils import _setup_logger
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 
 class CLIPScore:
     def __init__(self, root, gt_json, save_dir, extension, resolution, batch_size,
-                 model_name="ViT-B-32", pretrained="laion2b_s34b_b79k", images=None, logger=None):
+                 model_name="ViT-B-32", pretrained="laion2b_s34b_b79k", images=None, logger=None, num_workers=16):
         """
         Initialize the CLIPScore class.
         :param root: The root directory containing images.
@@ -27,6 +28,7 @@ class CLIPScore:
         :param pretrained: The pretrained weights to use for the CLIP model (default is "laion2b_s34b_b79k").
         :param images: Optional list of PIL Image objects. If provided, these will be used instead of loading from disk.
         :param logger: Logger instance for logging (optional). If None, a new logger will be created.
+        :param num_workers: Threads used to crop and preprocess images (results do not depend on it).
         """
         if logger is None:
             self.logger = _setup_logger(os.path.join(save_dir, 'overlay_bench.log'))
@@ -40,9 +42,15 @@ class CLIPScore:
         self.resolution = resolution
         self.batch_size = batch_size
         self.images = images if images is not None else []
+        self.pool = ThreadPoolExecutor(max(1, num_workers))
         self.logger.info(f"CLIPScore initialized with model {model_name} and pretrained {pretrained}")
         self.model, self.tokenizer, self.preprocess = self._load_model(model_name, pretrained)
 
+
+    def __del__(self):
+        pool = getattr(self, "pool", None)
+        if pool is not None:
+            pool.shutdown(wait=False)
 
     @staticmethod
     def _load_model(model_name="ViT-B-32", pretrained="laion2b_s34b_b79k"):
@@ -84,8 +92,8 @@ class CLIPScore:
         if not isinstance(images, (list, tuple)): images = [images]
         if not isinstance(texts, (list, tuple)): texts = [texts]
 
-        # Load & stack
-        img_batch = torch.stack([self._load_image(i) for i in images]).to(device)
+        # Load & stack (preprocessing runs in the thread pool, the batch is the same)
+        img_batch = torch.stack(list(self.pool.map(self._load_image, images))).to(device)
 
         text_tokens = self.tokenizer(texts).to(device)
 
@@ -124,7 +132,7 @@ class CLIPScore:
             else:
                 images = [os.path.join(root, data[0] + f".{self.extension}") for data in batch]
             texts = [data[1]['caption'] for data in batch]
-            global_sims = self.clip_similarity(images, texts)
+            global_sims = self.clip_similarity(images, texts).reshape(-1)  # a batch of one image stays indexable
             global_sim_avg += global_sims.sum().item()
             for j, data in enumerate(batch):
                 res['global_clip_sim_per_img'][data[0]] = {
@@ -151,12 +159,13 @@ class CLIPScore:
         for i in tqdm(range(0, len(annotations_flat), bs), desc=f"Calculate CLIP similarity with batch size={bs}"):
             batch = annotations_flat[i: i + bs]
             if len(self.images) != 0:
-                images = [self.images[img_id].crop(bbox) for img_id, bbox, _, _ in batch]
+                images = list(self.pool.map(lambda x: self.images[x[0]].crop(x[1]), batch))
             else:
-                images = [Image.open(os.path.join(root, image + f".{self.extension}")).convert("RGB").crop(bbox) for
-                          image, bbox, _, _ in batch]
+                images = list(self.pool.map(
+                    lambda x: Image.open(os.path.join(root, x[0] + f".{self.extension}")).convert("RGB").crop(x[1]),
+                    batch))
             texts = [data[2] for data in batch]
-            local_sims = self.clip_similarity(images, texts)
+            local_sims = self.clip_similarity(images, texts).reshape(-1)
             local_sim_avg += local_sims.sum().item()
             for j, data in enumerate(batch):
                 res['local_clip_sim_per_img'][data[0]][data[-1]] = {

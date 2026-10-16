@@ -1,12 +1,1 @@
-pyiqa
-torch
-torchvision
-accelerate
-datasets
-open_clip_torch
-qwen-vl-utils
-vllm==0.8.5
-
-tqdm
-pillow
-prettytable
+-e .[all]

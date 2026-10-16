@@ -1,11 +1,5 @@
-pyiqa
+-e .[fid]
 torch==2.6.0
 torchvision==0.21.0
 accelerate==1.5.2
-datasets==3.4.1
-open_clip_torch
-qwen-vl-utils
-
-tqdm
-pillow
-prettytable
+transformers==4.49.0
