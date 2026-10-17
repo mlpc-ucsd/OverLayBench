@@ -19,5 +19,6 @@
   "CycleGen": { "paper": "https://arxiv.org/abs/2603.14957", "code": null, "pub": "arXiv 2026", "time": "2026-03-16" },
   "DepthArb": { "paper": "https://arxiv.org/abs/2603.23924", "code": null, "pub": "arXiv 2026", "time": "2026-03-25" },
   "FLUX 3 Image Klein": { "paper": "https://bfl.ai/blog/flux-3-image-klein", "code": "https://github.com/black-forest-labs/flux-3-image-klein", "pub": "BFL 2026", "time": "2026-10-15", "isNew": true },
-  "FLUX 3 Image Klein (w/ PUP)": { "paper": "https://bfl.ai/blog/flux-3-image-klein", "code": "https://github.com/black-forest-labs/flux-3-image-klein", "pub": "BFL 2026", "time": "2026-10-15", "isNew": true }
+  "FLUX 3 Image Klein (w/ PUP)": { "paper": "https://bfl.ai/blog/flux-3-image-klein", "code": "https://github.com/black-forest-labs/flux-3-image-klein", "pub": "BFL 2026", "time": "2026-10-15", "isNew": true },
+  "MOSS-Image-SFT": { "paper": "https://openmoss.ai/MOSS-Image/paper/MOSS_Image_Technical_Report.pdf", "code": "https://github.com/OpenMOSS/MOSS-Image", "pub": "OpenMOSS 2026", "time": "2026-10-16", "isNew": true }
 }
