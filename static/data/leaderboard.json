@@ -16,7 +16,8 @@
       { "method": "CycleGen", "backbone": "AR", "miou": 64.84, "omiou": 42.03, "sre": 85.05, "srr": 90.53, "clip_global": 35.48, "clip_local": 27.89, "fid": "N/A" },
       { "method": "FLUX 3 Image Klein", "backbone": "DiT", "miou": 81.61, "omiou": 67.56, "sre": 97.61, "srr": 93.21, "clip_global": 37.96, "clip_local": 31.57, "fid": 24.26 },
       { "method": "FLUX 3 Image Klein (w/ PUP)", "backbone": "DiT", "miou": 80.35, "omiou": 64.34, "sre": 96.81, "srr": 93.24, "clip_global": 38.25, "clip_local": 31.34, "fid": 26.99 },
-      { "method": "MOSS-Image-SFT", "backbone": "DiT", "miou": 85.04, "omiou": 73.58, "sre": 97.28, "srr": 93.42, "clip_global": 37.62, "clip_local": 31.47, "fid": 24.00 }
+      { "method": "MOSS-Image-SFT", "backbone": "DiT", "miou": 85.04, "omiou": 73.58, "sre": 97.28, "srr": 93.42, "clip_global": 37.62, "clip_local": 31.47, "fid": 24.00 },
+      { "method": "MOSS-Image-Base", "backbone": "DiT", "miou": 84.78, "omiou": 72.57, "sre": 96.24, "srr": 92.82, "clip_global": 36.95, "clip_local": 31.15, "fid": 24.27 }
     ],
     "regular": [
       { "method": "GLIGEN", "backbone": "U-Net", "miou": 52.46, "omiou": 26.53, "sre": 44.88, "srr": 77.46, "clip_global": 33.93, "clip_local": 23.42, "fid": 52.22 },
@@ -34,7 +35,8 @@
       { "method": "CycleGen", "backbone": "AR", "miou": 54.21, "omiou": 29.04, "sre": 80.58, "srr": 87.98, "clip_global": 34.74, "clip_local": 26.42, "fid": "N/A" },
       { "method": "FLUX 3 Image Klein", "backbone": "DiT", "miou": 76.16, "omiou": 57.95, "sre": 97.15, "srr": 88.63, "clip_global": 37.58, "clip_local": 30.42, "fid": 39.78 },
       { "method": "FLUX 3 Image Klein (w/ PUP)", "backbone": "DiT", "miou": 74.35, "omiou": 54.03, "sre": 96.07, "srr": 88.67, "clip_global": 37.79, "clip_local": 30.12, "fid": 44.81 },
-      { "method": "MOSS-Image-SFT", "backbone": "DiT", "miou": 80.19, "omiou": 64.19, "sre": 95.82, "srr": 88.44, "clip_global": 37.21, "clip_local": 30.21, "fid": 40.36 }
+      { "method": "MOSS-Image-SFT", "backbone": "DiT", "miou": 80.19, "omiou": 64.19, "sre": 95.82, "srr": 88.44, "clip_global": 37.21, "clip_local": 30.21, "fid": 40.36 },
+      { "method": "MOSS-Image-Base", "backbone": "DiT", "miou": 79.12, "omiou": 62.80, "sre": 94.99, "srr": 88.05, "clip_global": 36.40, "clip_local": 29.98, "fid": 40.57 }
     ],
     "complex": [
       { "method": "GLIGEN", "backbone": "U-Net", "miou": 50.79, "omiou": 23.85, "sre": 41.70, "srr": 79.93, "clip_global": 33.92, "clip_local": 22.75, "fid": 57.32 },
@@ -52,7 +54,8 @@
       { "method": "CycleGen", "backbone": "AR", "miou": 50.72, "omiou": 24.50, "sre": 74.01, "srr": 87.07, "clip_global": 34.57, "clip_local": 25.58, "fid": "N/A" },
       { "method": "FLUX 3 Image Klein", "backbone": "DiT", "miou": 74.25, "omiou": 54.94, "sre": 94.88, "srr": 87.77, "clip_global": 37.34, "clip_local": 29.15, "fid": 44.87 },
       { "method": "FLUX 3 Image Klein (w/ PUP)", "backbone": "DiT", "miou": 71.73, "omiou": 49.51, "sre": 92.46, "srr": 87.77, "clip_global": 37.55, "clip_local": 28.55, "fid": 52.82 },
-      { "method": "MOSS-Image-SFT", "backbone": "DiT", "miou": 77.06, "omiou": 60.04, "sre": 93.40, "srr": 87.67, "clip_global": 37.02, "clip_local": 28.85, "fid": 44.71 }
+      { "method": "MOSS-Image-SFT", "backbone": "DiT", "miou": 77.06, "omiou": 60.04, "sre": 93.40, "srr": 87.67, "clip_global": 37.02, "clip_local": 28.85, "fid": 44.71 },
+      { "method": "MOSS-Image-Base", "backbone": "DiT", "miou": 75.63, "omiou": 58.20, "sre": 92.54, "srr": 88.02, "clip_global": 36.24, "clip_local": 28.62, "fid": 44.50 }
     ]
   },
   "training_free": {
